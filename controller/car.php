@@ -1,9 +1,9 @@
 <?php
-require_once 'utils/paging.class.php';
-require_once 'utils/validator.class.php';
-require_once 'model/cars.class.php';
-require_once 'model/brands.class.php';
-require_once 'model/models.class.php';
+require_once 'Utils/paging.class.php';
+require_once 'Utils/validator.class.php';
+require_once 'Model/Cars.php';
+require_once 'Model/Brands.php';
+require_once 'Model/Models.php';
 
 
 class carController {
@@ -36,7 +36,7 @@ class carController {
 
   public function listAction() {
     // suskaičiuojame bendrą įrašų kiekį
-    $elementCount = cars::getCarListCount();
+    $elementCount = Cars::getCarListCount();
 
     // sukuriame puslapiavimo klasės objektą
     $paging = new paging(NUMBER_OF_ROWS_IN_PAGE);
@@ -45,7 +45,7 @@ class carController {
     $paging->process($elementCount, routing::getPageId());
 
     // išrenkame nurodyto puslapio markes
-    $data = cars::getCarList($paging->size, $paging->first);
+    $data = Cars::getCarList($paging->size, $paging->first);
 
     $template = template::getInstance();
 
@@ -66,12 +66,12 @@ class carController {
     // If entered data was valid
     if ($data) {
       // Find max ID in the database
-      $latestId = cars::getMaxIdOfCar();
+      $latestId = Cars::getMaxIdOfCar();
       // Increment it by one
       $data['id'] = $latestId + 1;
 
       // Insert row into database
-      cars::insertCar($data);
+      Cars::insertCar($data);
 
       // Redirect back to the list
       routing::redirect(routing::getModule(), 'list');
@@ -83,7 +83,7 @@ class carController {
   public function editAction() {
     $id = routing::getId();
 
-    $car = cars::getCar($id);
+    $car = Cars::getCar($id);
     if ($car == false) {
       routing::redirect(routing::getModule(), 'list', 'id_error=1');
       return;
@@ -99,7 +99,7 @@ class carController {
       $data['id'] = $id;
 
       // Update it in DataBase
-      cars::updateCar($data);
+      Cars::updateCar($data);
 
       // Redirect back to the list
       routing::redirect(routing::getModule(), 'list');
@@ -112,11 +112,11 @@ class carController {
     $template = template::getInstance();
 
     $brandsModels = models::getBrandsAndModels();
-    $gearboxes = cars::getGearboxList();
-    $fueltypes = cars::getFuelTypeList();
-    $bodytypes = cars::getBodyTypeList();
-    $luggage = cars::getLuggageTypeList();
-    $car_states = cars::getCarStateList();
+    $gearboxes = Cars::getGearboxList();
+    $fueltypes = Cars::getFuelTypeList();
+    $bodytypes = Cars::getBodyTypeList();
+    $luggage = Cars::getLuggageTypeList();
+    $car_states = Cars::getCarStateList();
 
     $template->assign('brandsModels', $brandsModels);
     $template->assign('gearboxes', $gearboxes);
@@ -168,7 +168,7 @@ class carController {
     $id = routing::getId();
 
     // pašaliname automobilį
-    $err = (cars::deleteCar($id)) ? '' : 'delete_error=1';
+    $err = (Cars::deleteCar($id)) ? '' : 'delete_error=1';
 
     // nukreipiame į automobilių puslapį
     routing::redirect(routing::getModule(), 'list', $err);

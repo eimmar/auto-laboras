@@ -1,7 +1,7 @@
 <?php
-require_once 'utils/paging.class.php';
-require_once 'utils/validator.class.php';
-require_once 'model/customers.class.php';
+require_once 'Utils/paging.class.php';
+require_once 'Utils/validator.class.php';
+require_once 'Model/Customers.php';
 
 class customerController {
 

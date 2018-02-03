@@ -5,11 +5,11 @@ session_start();
 require_once 'config.php';
 
 // iškviečiame prisijungimo prie duomenų bazės klasę
-require_once 'utils/mysql_pdo.class.php';
+require_once 'Utils/Mysql.php';
 
-require_once 'utils/routing.class.php';
-require_once 'utils/controller.class.php';
-require_once 'utils/template.class.php';
+require_once 'Utils/routing.class.php';
+require_once 'Utils/controller.class.php';
+require_once 'Utils/template.class.php';
 
 $controller = new controller();
 

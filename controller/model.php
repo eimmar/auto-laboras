@@ -1,8 +1,8 @@
 <?php
-require_once 'utils/paging.class.php';
-require_once 'utils/validator.class.php';
-require_once 'model/models.class.php';
-require_once 'model/brands.class.php';
+require_once 'Utils/paging.class.php';
+require_once 'Utils/validator.class.php';
+require_once 'Model/Models.php';
+require_once 'Model/Brands.php';
 
 
 class modelController {
@@ -97,7 +97,7 @@ class modelController {
 
   private function showForm() {
     $template = template::getInstance();
-    $template->assign('brands', brands::getBrandList());
+    $template->assign('Brands', Brands::getBrandList());
     $template->assign('required', $this->required);
     $template->assign('maxLengths', $this->maxLengths);
     $template->setView("model_form");
@@ -133,7 +133,7 @@ class modelController {
   public function deleteAction() {
     $id = routing::getId();
 
-    // remove model
+    // remove Model
     $err = (models::deleteModel($id)) ? '' : 'delete_error=1';
 
     // redirect back to list page

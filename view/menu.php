@@ -6,7 +6,7 @@
     'employee' => 'Darbuotojai',
     'car' => 'Automobiliai',
     'brand' => 'Markės',
-    'model' => 'Modeliai'
+    'Model' => 'Modeliai'
   );
   $menuRight = array(
     'report' => 'Ataskaitos'

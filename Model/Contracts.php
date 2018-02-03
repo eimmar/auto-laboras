@@ -1,4 +1,7 @@
 <?php
+namespace Model;
+
+use Utils\Mysql;
 
 /**
  * Sutarčių redagavimo klasė
@@ -6,7 +9,7 @@
  * @author ISK
  */
 
-class contracts {
+class Contracts {
 
   /**
    * Sutarčių sąrašo išrinkimas
@@ -41,7 +44,7 @@ class contracts {
       $parameters[] = $offset;
     }
 
-    $stmt = mysql::getInstance()->prepare($query);
+    $stmt = Mysql::getInstance()->prepare($query);
     $stmt->execute($parameters);
     $data = $stmt->fetchAll();
     return $data;
@@ -61,7 +64,7 @@ class contracts {
         ON `" . DB_PREFIX . "sutartys`.`fk_klientas` = `" . DB_PREFIX . "klientai`.`asmens_kodas`
       LEFT JOIN `" . DB_PREFIX . "sutarties_busenos`
         ON `" . DB_PREFIX . "sutartys`.`busena` = `" . DB_PREFIX . "sutarties_busenos`.`id`";
-    $stmt = mysql::getInstance()->query($query);
+    $stmt = Mysql::getInstance()->query($query);
     $data = $stmt->fetchAll();
 
     return $data[0]['kiekis'];
@@ -100,7 +103,7 @@ class contracts {
       GROUP BY
         `" . DB_PREFIX . "sutartys`.`nr`";
 
-    $stmt = mysql::getInstance()->prepare($query);
+    $stmt = Mysql::getInstance()->prepare($query);
     $stmt->execute(array($id));
     $data = $stmt->fetchAll();
     if (count($data) == 0) {
@@ -116,7 +119,7 @@ class contracts {
    */
   public static function getOrderedServices($orderId) {
     $query = "SELECT * FROM `" . DB_PREFIX . "uzsakytos_paslaugos` WHERE `fk_sutartis` = ?";
-    $stmt = mysql::getInstance()->prepare($query);
+    $stmt = Mysql::getInstance()->prepare($query);
     $stmt->execute(array($orderId));
     $data = $stmt->fetchAll();
     return $data;
@@ -145,7 +148,7 @@ class contracts {
         `fk_paemimo_vieta` = ?
       WHERE `nr` = ?";
 
-    $stmt = mysql::getInstance()->prepare($query);
+    $stmt = Mysql::getInstance()->prepare($query);
     $stmt->execute(array(
       $data['sutarties_data'],
       $data['nuomos_data_laikas'],
@@ -190,7 +193,7 @@ class contracts {
         `fk_grazinimo_vieta`,
         `fk_paemimo_vieta`
       ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = mysql::getInstance()->prepare($query);
+    $stmt = Mysql::getInstance()->prepare($query);
     $parameters = array(
       $data['nr'],
       $data['sutarties_data'],
@@ -223,7 +226,7 @@ class contracts {
    */
   public static function deleteContract($id) {
     $query = "DELETE FROM `" . DB_PREFIX . "sutartys` WHERE `nr` = ?";
-    $stmt = mysql::getInstance()->prepare($query);
+    $stmt = Mysql::getInstance()->prepare($query);
     $stmt->execute(array($id));
   }
 
@@ -251,7 +254,7 @@ class contracts {
 
    // print_r($query);
 
-    $stmt = mysql::getInstance()->prepare($query);
+    $stmt = Mysql::getInstance()->prepare($query);
     $stmt->execute($parameters);
   }
 
@@ -307,7 +310,7 @@ class contracts {
           `kaina` = VALUES(`kaina`)
       ";
 
-      $stmt = mysql::getInstance()->prepare($query);
+      $stmt = Mysql::getInstance()->prepare($query);
       $stmt->execute($parameters);
     }
   }
@@ -318,7 +321,7 @@ class contracts {
    */
   public static function getContractStates() {
     $query = "SELECT * FROM `" . DB_PREFIX . "sutarties_busenos`";
-    $stmt = mysql::getInstance()->query($query);
+    $stmt = Mysql::getInstance()->query($query);
     $data = $stmt->fetchAll();
     return $data;
   }
@@ -329,7 +332,7 @@ class contracts {
    */
   public static function getParkingLots() {
     $query = "SELECT * FROM `" . DB_PREFIX . "aiksteles`";
-    $stmt = mysql::getInstance()->query($query);
+    $stmt = Mysql::getInstance()->query($query);
     $data = $stmt->fetchAll();
     return $data;
   }
@@ -404,7 +407,7 @@ class contracts {
       {$whereClauseString}
       GROUP BY `" . DB_PREFIX . "sutartys`.`nr`
       ORDER BY `" . DB_PREFIX . "klientai`.`pavarde` ASC";
-    $stmt = mysql::getInstance()->prepare($query);
+    $stmt = Mysql::getInstance()->prepare($query);
     $stmt->execute($parameters);
     $data = $stmt->fetchAll();
     return $data;
@@ -433,7 +436,7 @@ class contracts {
       FROM `" . DB_PREFIX . "sutartys`
       {$whereClauseString}";
 
-    $stmt = mysql::getInstance()->prepare($query);
+    $stmt = Mysql::getInstance()->prepare($query);
     $stmt->execute($parameters);
     $data = $stmt->fetchAll();
     return $data;
@@ -464,7 +467,7 @@ class contracts {
       INNER JOIN `" . DB_PREFIX . "uzsakytos_paslaugos`
         ON `" . DB_PREFIX . "sutartys`.`nr` = `" . DB_PREFIX . "uzsakytos_paslaugos`.`fk_sutartis`
       {$whereClauseString}";
-    $stmt = mysql::getInstance()->prepare($query);
+    $stmt = Mysql::getInstance()->prepare($query);
     $stmt->execute($parameters);
     $data = $stmt->fetchAll();
     return $data;
@@ -509,7 +512,7 @@ class contracts {
       )
       {$whereClauseString}";
 
-    $stmt = mysql::getInstance()->prepare($query);
+    $stmt = Mysql::getInstance()->prepare($query);
     $stmt->execute($parameters);
     $data = $stmt->fetchAll();
     return $data;

@@ -1,8 +1,8 @@
 <?php
-require_once 'utils/template.class.php';
-require_once 'utils/validator.class.php';
-require_once 'model/contracts.class.php';
-require_once 'model/services.class.php';
+require_once 'Utils/template.class.php';
+require_once 'Utils/validator.class.php';
+require_once 'Model/Contracts.php';
+require_once 'Model/Services.php';
 
 class reportController {
   public static $defaultAction = "index";

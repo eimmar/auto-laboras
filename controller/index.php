@@ -1,5 +1,5 @@
 <?php
-require_once 'utils/template.class.php';
+require_once 'Utils/template.class.php';
 
 class indexController {
   public static $defaultAction = "index";

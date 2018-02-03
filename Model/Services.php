@@ -1,4 +1,5 @@
 <?php
+namespace Model;
 
 /**
  * Papildomų paslaugų redagavimo klasė
@@ -6,7 +7,7 @@
  * @author ISK
  */
 
-class services {
+class Services {
 
   /**
    * Paslaugų sąrašo išrinkimas

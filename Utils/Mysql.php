@@ -1,9 +1,14 @@
 <?php
+namespace Utils;
+
+use PDO;
+use PDOException;
+
 /**
  * PDO MySQL singleton class
  */
 
-class mysql extends PDO {
+class Mysql extends PDO {
   private static $instance = null;
 
   public function __construct() {
@@ -22,7 +27,7 @@ class mysql extends PDO {
 
   public static function getInstance() {
     if (self::$instance === null)
-      self::$instance = new mysql();
+      self::$instance = new Mysql();
 
     return self::$instance;
   }

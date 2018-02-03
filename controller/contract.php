@@ -1,11 +1,15 @@
 <?php
-require_once 'utils/paging.class.php';
-require_once 'utils/validator.class.php';
-require_once 'model/cars.class.php';
-require_once 'model/contracts.class.php';
-require_once 'model/customers.class.php';
-require_once 'model/employees.class.php';
-require_once 'model/services.class.php';
+
+
+use Model\Contracts;
+
+require_once 'Utils/paging.class.php';
+require_once 'Utils/validator.class.php';
+require_once 'Model/Cars.php';
+require_once 'Model/Customers.php';
+require_once 'Model/Employees.php';
+require_once 'Model/Services.php';
+
 
 class contractController {
 
@@ -37,7 +41,7 @@ class contractController {
 
   public function listAction() {
     // suskaičiuojame bendrą įrašų kiekį
-    $elementCount = contracts::getContractListCount();
+    $elementCount = Model\Contracts::getContractListCount();
 
     // sukuriame puslapiavimo klasės objektą
     $paging = new paging(NUMBER_OF_ROWS_IN_PAGE);
@@ -46,7 +50,7 @@ class contractController {
     $paging->process($elementCount, routing::getPageId());
 
     // išrenkame nurodyto puslapio markes
-    $data = contracts::getContractList($paging->size, $paging->first);
+    $data = Contracts::getContractList($paging->size, $paging->first);
 
     $template = template::getInstance();
 
@@ -64,9 +68,9 @@ class contractController {
     // If entered data was valid
     if ($data) {
       // Insert row into database
-      if (contracts::insertContract($data)) {
+      if (Contracts::insertContract($data)) {
         // Enter ordered services into database
-        contracts::updateOrderedServices($data);
+        Contracts::updateOrderedServices($data);
 
         // Redirect back to the list
         routing::redirect(routing::getModule(), 'list');
@@ -85,12 +89,12 @@ class contractController {
   public function editAction() {
     $id = routing::getId();
 
-    $contract = contracts::getContract($id);
+    $contract = Contracts::getContract($id);
     if ($contract == false) {
       routing::redirect(routing::getModule(), 'list', 'id_error=1');
       return;
     }
-    $contract['uzsakytos_paslaugos'] = contracts::getOrderedServices($id);
+    $contract['uzsakytos_paslaugos'] = Contracts::getOrderedServices($id);
 
     $template = template::getInstance();
     $template->assign('fields', $contract);
@@ -101,10 +105,10 @@ class contractController {
       $data['nr'] = $id;
 
       // Update it in database
-      contracts::updateContract($data);
+      Contracts::updateContract($data);
 
       // Update ordered services
-      contracts::updateOrderedServices($data);
+      Contracts::updateOrderedServices($data);
 
       // Redirect back to the list
       routing::redirect(routing::getModule(), 'list');
@@ -120,9 +124,9 @@ class contractController {
 
     $template->assign('customerList', customers::getCustomersList());
     $template->assign('employeesList', employees::getEmployeesList());
-    $template->assign('contractStates', contracts::getContractStates());
-    $template->assign('carsList', cars::getCarList());
-    $template->assign('parkingLots', contracts::getParkingLots());
+    $template->assign('contractStates', Contracts::getContractStates());
+    $template->assign('carsList', Cars::getCarList());
+    $template->assign('parkingLots', Contracts::getParkingLots());
     $template->assign('required', $this->required);
 
     $template->setView("contract_form");
@@ -161,10 +165,10 @@ class contractController {
     $id = routing::getId();
 
     // pašaliname užsakytas paslaugas
-    contracts::deleteOrderedServices($id);
+    Contracts::deleteOrderedServices($id);
 
     // šaliname sutartį
-    contracts::deleteContract($id);
+    Contracts::deleteContract($id);
 
     // nukreipiame į sutarčių puslapį
     routing::redirect(routing::getModule(), 'list');

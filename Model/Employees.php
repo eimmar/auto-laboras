@@ -1,4 +1,5 @@
 <?php
+namespace Model;
 
 /**
  * Darbuotojų redagavimo klasė
@@ -6,7 +7,7 @@
  * @author ISK
  */
 
-class employees {
+class Employees {
 
   /**
    * Darbuotojo išrinkimas
