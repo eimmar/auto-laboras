@@ -1,4 +1,5 @@
 <?php
+namespace Utils;
 
 /**
  * Sąrašo puslapių kūrimo klasė
@@ -6,7 +7,7 @@
  * @author ISK
  */
 
-class paging {
+class Paging {
 	private $pageRange;
 	
 	public $first;

@@ -1,13 +1,14 @@
 <?php
+namespace Utils;
 
-class routing {
+class Routing {
 
   private static $instance = null;
   private $data = array();
 
   public static function getInstance() {
     if (self::$instance === null)
-      self::$instance = new routing();
+      self::$instance = new Routing();
 
     return self::$instance;
   }

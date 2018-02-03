@@ -1,4 +1,6 @@
 <?php
+namespace Utils;
+
 /**
  * Pork Formvalidator. validates fields by regexes and can sanatize them. Uses PHP filter_var built-in functions and extra regexes 
  * @package pork
@@ -15,7 +17,7 @@
  * @version 1.0
  * @access public
  */
-class validator
+class Validator
 {
     public $regexes = Array(
 		'date' => "^[0-9]{4}[-/][0-9]{1,2}[-/][0-9]{1,2}\$", // 2016-01-15

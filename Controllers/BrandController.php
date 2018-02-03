@@ -1,9 +1,14 @@
 <?php
-require_once 'Utils/paging.class.php';
-require_once 'Utils/validator.class.php';
-require_once 'Model/Brands.php';
+namespace Controllers;
 
-class brandController {
+use Model\Brands;
+use Utils\Paging;
+use Utils\Routing;
+use Utils\Template;
+use Utils\Validator;
+
+class BrandController
+{
 
     public static $defaultAction = "list";
 
@@ -22,15 +27,15 @@ class brandController {
         $elementCount = Brands::getBrandListCount();
 
         // sukuriame puslapiavimo klasės objektą
-        $paging = new paging(NUMBER_OF_ROWS_IN_PAGE);
+        $paging = new Paging(NUMBER_OF_ROWS_IN_PAGE);
 
         // suformuojame sąrašo puslapius
-        $paging->process($elementCount, routing::getPageId());
+        $paging->process($elementCount, Routing::getPageId());
 
         // išrenkame nurodyto puslapio markes
         $data = Brands::getBrandList($paging->size, $paging->first);
 
-        $template = template::getInstance();
+        $template = Template::getInstance();
 
         $template->assign('data', $data);
         $template->assign('pagingData', $paging->data);
@@ -58,7 +63,7 @@ class brandController {
             Brands::insertBrand($data);
 
             // Redirect back to the list
-            routing::redirect(routing::getModule(), 'list');
+            Routing::redirect(Routing::getModule(), 'list');
         } else {
             $this->showForm();
         }
@@ -66,16 +71,16 @@ class brandController {
 
     public function editAction()
     {
-        $id = routing::getId();
+        $id = Routing::getId();
 
         $brand = Brands::getBrand($id);
         if ($brand == false) {
-            routing::redirect(routing::getModule(), 'list', 'id_error=1');
+            Routing::redirect(Routing::getModule(), 'list', 'id_error=1');
             return;
         }
 
         // Fill form fields with current data
-        $template = template::getInstance();
+        $template = Template::getInstance();
         $template->assign('fields', $brand);
 
         $data = $this->validateInput();
@@ -87,7 +92,7 @@ class brandController {
             Brands::updateBrand($data);
 
             // Redirect back to the list
-            routing::redirect(routing::getModule(), 'list');
+            Routing::redirect(Routing::getModule(), 'list');
         } else {
             $this->showForm();
         }
@@ -95,7 +100,7 @@ class brandController {
 
     private function showForm()
     {
-        $template = template::getInstance();
+        $template = Template::getInstance();
         $template->assign('required', $this->required);
         $template->assign('maxLengths', $this->maxLengths);
         $template->setView("brand_form");
@@ -109,11 +114,11 @@ class brandController {
         }
 
         // Create Validator object
-        $validator = new validator($this->validations,
+        $validator = new Validator($this->validations,
             $this->required, $this->maxLengths);
 
         if(!$validator->validate($_POST)) {
-            $template = template::getInstance();
+            $template = Template::getInstance();
 
             // Overwrite fields array with submitted $_POST values
             $template->assign('fields', $_POST);
@@ -131,13 +136,13 @@ class brandController {
 
     public function deleteAction()
     {
-        $id = routing::getId();
+        $id = Routing::getId();
 
         // šaliname markę
         $err = (Brands::deleteBrand($id)) ? '' : 'delete_error=1';
 
         // nukreipiame į markių puslapį
-        routing::redirect(routing::getModule(), 'list', $err);
+        Routing::redirect(Routing::getModule(), 'list', $err);
     }
 
 };

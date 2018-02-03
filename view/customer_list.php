@@ -1,10 +1,14 @@
-<?php require('header.php'); ?>
+<?php
+require('header.php');
+use Utils\Routing;
+
+?>
 <ul id="pagePath">
-	<li><a href="<?php echo routing::getURL(); ?>">Pradžia</a></li>
+	<li><a href="<?php echo Routing::getURL(); ?>">Pradžia</a></li>
 	<li>Klientai</li>
 </ul>
 <div id="actions">
-	<a href='<?php echo routing::getURL($module, 'create'); ?>'>Naujas klientas</a>
+	<a href='<?php echo Routing::getURL($module, 'create'); ?>'>Naujas klientas</a>
 </div>
 <div class="float-clear"></div>
 
@@ -40,7 +44,7 @@
 					. "<td>{$val['gimimo_data']}</td>"
 					. "<td>"
 						. "<a href='#' onclick='showConfirmDialog(\"{$module}\", \"{$val['asmens_kodas']}\"); return false;' title=''>šalinti</a>&nbsp;"
-						. "<a href='" . routing::getURL($module, 'edit', 'id=' . $val['asmens_kodas']), "' title=''>redaguoti</a>"
+						. "<a href='" . Routing::getURL($module, 'edit', 'id=' . $val['asmens_kodas']), "' title=''>redaguoti</a>"
 					. "</td>"
 				. "</tr>\n";
 		}

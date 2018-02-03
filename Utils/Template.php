@@ -1,4 +1,5 @@
 <?php
+namespace Utils;
 
 /**
  * Puslapio šablono panaudojimo klasė
@@ -6,7 +7,7 @@
  * @author V.Sutkus, <v.sutkus@ktu.edu>, IF-4/2
  */
 
-class template {
+class Template {
 
   private static $instance = null;
 
@@ -16,7 +17,7 @@ class template {
 
   public static function getInstance() {
     if (self::$instance === null)
-      self::$instance = new template();
+      self::$instance = new Template();
 
     return self::$instance;
   }

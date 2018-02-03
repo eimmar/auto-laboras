@@ -1,3 +1,8 @@
+<?php
+require('header.php');
+use Utils\Routing;
+
+?>
 <div id="pagingLabel">
 	Puslapiai:
 </div>
@@ -8,7 +13,7 @@
 			$activeClass = " class='active'";
 		}
     echo "<li{$activeClass}>",
-      "<a href='", routing::getURL($module, '', "page=${value['page']}"), "'>",
+      "<a href='", Routing::getURL($module, '', "page=${value['page']}"), "'>",
       $value['page'], "</a></li>";
 	} ?>
 </ul>

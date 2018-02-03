@@ -1,10 +1,14 @@
 <?php
-require_once 'Utils/paging.class.php';
-require_once 'Utils/validator.class.php';
-require_once 'Model/Contracts.php';
-require_once 'Model/Services.php';
+namespace Controllers;
 
-class serviceController {
+use Model\Services;
+use Utils\Paging;
+use Utils\Routing;
+use Utils\Template;
+use Utils\Validator;
+
+class ServiceController
+{
 
   public static $defaultAction = "list";
 
@@ -27,18 +31,18 @@ class serviceController {
 
   public function listAction() {
     // suskaičiuojame bendrą įrašų kiekį
-    $elementCount = services::getServicesListCount();
+    $elementCount = Services::getServicesListCount();
 
     // sukuriame puslapiavimo klasės objektą
-    $paging = new paging(NUMBER_OF_ROWS_IN_PAGE);
+    $paging = new Paging(NUMBER_OF_ROWS_IN_PAGE);
 
     // suformuojame sąrašo puslapius
-    $paging->process($elementCount, routing::getPageId());
+    $paging->process($elementCount, Routing::getPageId());
 
     // išrenkame nurodyto puslapio markes
     $data = services::getServicesList($paging->size, $paging->first);
 
-    $template = template::getInstance();
+    $template = Template::getInstance();
 
     $template->assign('data', $data);
     $template->assign('pagingData', $paging->data);
@@ -68,24 +72,24 @@ class serviceController {
       services::insertServicePrices($data);
 
       // Redirect back to the list
-      routing::redirect(routing::getModule(), 'list');
+      Routing::redirect(Routing::getModule(), 'list');
     } else {
       $this->showForm();
     }
   }
 
   public function editAction() {
-    $id = routing::getId();
+    $id = Routing::getId();
 
     $service = services::getService($id);
     if ($service == false) {
-      routing::redirect(routing::getModule(), 'list', 'id_error=1');
+      Routing::redirect(Routing::getModule(), 'list', 'id_error=1');
       return;
     }
 
 
     // Fill form fields with current data
-    $template = template::getInstance();
+    $template = Template::getInstance();
     $template->assign('fields', $service);
 
     $data = $this->validateInput();
@@ -103,14 +107,14 @@ class serviceController {
       services::insertServicePrices($data);
 
       // Redirect back to the list
-      routing::redirect(routing::getModule(), 'list');
+      Routing::redirect(Routing::getModule(), 'list');
     } else {
       $this->showForm();
     }
   }
 
   private function showForm() {
-    $template = template::getInstance();
+    $template = Template::getInstance();
     $template->assign('required', $this->required);
     $template->assign('maxLengths', $this->maxLengths);
     $template->setView("service_form");
@@ -123,7 +127,7 @@ class serviceController {
     $usedPrices = array();
     $unusedPrices = array();
 
-    $id = routing::getId();
+    $id = Routing::getId();
     if ($id) {
       $usedPrices = services::getServicePrices($id, 1);
       if (empty($_POST['submit'])) {
@@ -155,11 +159,11 @@ class serviceController {
     }
 
     // Create Validator object
-    $validator = new validator($this->validations,
+    $validator = new Validator($this->validations,
       $this->required, $this->maxLengths);
 
     if(!$validator->validate($_POST)) {
-      $template = template::getInstance();
+      $template = Template::getInstance();
 
       // Overwrite fields array with submitted $_POST values
       $template->assign('fields', $_POST);
@@ -176,7 +180,7 @@ class serviceController {
   }
 
   public function deleteAction() {
-    $id = routing::getId();
+    $id = Routing::getId();
 
     // pašaliname paslaugos kainas
     services::deleteServicePrices($id);
@@ -185,7 +189,7 @@ class serviceController {
     $err = (services::deleteService($id)) ? '' : 'delete_error=1';
 
     // Redirect back to the list
-    routing::redirect(routing::getModule(), 'list', $err);
+    Routing::redirect(Routing::getModule(), 'list', $err);
   }
 
 };

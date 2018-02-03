@@ -1,3 +1,6 @@
+<?php
+use Utils\Routing;
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
@@ -14,7 +17,7 @@
 	<body>
 		<div id="body">
 			<div id="header">
-      <h3 id="slogan"><a href="<?php echo routing::getURL(); ?>">Automobilių nuomos IS</a></h3>
+      <h3 id="slogan"><a href="<?php echo Routing::getURL(); ?>">Automobilių nuomos IS</a></h3>
 			</div>
 
 			<div id="content">

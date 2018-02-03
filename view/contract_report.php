@@ -1,5 +1,6 @@
 <?php
-require('header_report.php');
+
+use Utils\Routing;
 
 function isRowFirstInGroup($dataArray, $i, $groupID) {
   if ($i == 0)
@@ -20,7 +21,6 @@ function isRowLastInGroup($dataArray, $i, $groupID) {
 
   return false;
 }
-
 ?>
 
 <div id="header">
@@ -45,7 +45,7 @@ function isRowLastInGroup($dataArray, $i, $groupID) {
         }
         ?>
       </span>
-      <a href="<?php echo routing::getURL($module, 'view', "id={$id}"); ?>" title="Nauja ataskaita" class="newReport">nauja ataskaita</a>
+      <a href="<?php echo Routing::getURL($module, 'view', "id={$id}"); ?>" title="Nauja ataskaita" class="newReport">nauja ataskaita</a>
     </li>
   </ul>
 </div>

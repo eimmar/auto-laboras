@@ -1,20 +1,18 @@
 <?php
-session_start();
 
+use Utils\Controller;
+use Utils\Routing;
+use Utils\Template;
+
+session_start();
 // nuskaitome konfigūracijų failą
 require_once 'config.php';
 
-// iškviečiame prisijungimo prie duomenų bazės klasę
-require_once 'Utils/Mysql.php';
 
-require_once 'Utils/routing.class.php';
-require_once 'Utils/controller.class.php';
-require_once 'Utils/template.class.php';
+$controller = new Controller();
 
-$controller = new controller();
-
-$template = template::getInstance();
-$template->assign('module', routing::getModule());
-$template->assign('id', routing::getId());
+$template = Template::getInstance();
+$template->assign('module', Routing::getModule());
+$template->assign('id', Routing::getId());
 $template->render();
 

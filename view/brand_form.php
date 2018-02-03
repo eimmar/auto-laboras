@@ -1,7 +1,10 @@
-<?php require('header.php'); ?>
+<?php
+require('header.php');
+use Utils\Routing;
+?>
 <ul id="pagePath">
-  <li><a href="<?php echo routing::getURL(); ?>">Pradžia</a></li>
-  <li><a href="<?php echo routing::getURL($module); ?>">Automobilių markės</a></li>
+  <li><a href="<?php echo Routing::getURL(); ?>">Pradžia</a></li>
+  <li><a href="<?php echo Routing::getURL($module); ?>">Automobilių markės</a></li>
   <li><?php echo (empty($id)) ? "Nauja markė" : "Markės redagavimas"; ?></li>
 </ul>
 <div class="float-clear"></div>
