@@ -1,8 +1,8 @@
 <?php
 namespace Controllers;
 
-use Model\Brands;
-use Model\Models;
+use Model\BrandRepository;
+use Model\ModelRepository;
 use Utils\Paging;
 use Utils\Routing;
 use Utils\Template;
@@ -27,7 +27,7 @@ class ModelController
 
   public function listAction() {
     // suskaičiuojame bendrą įrašų kiekį
-    $elementCount = Models::getModelListCount();
+    $elementCount = ModelRepository::getModelListCount();
 
     // sukuriame puslapiavimo klasės objektą
     $paging = new Paging(NUMBER_OF_ROWS_IN_PAGE);
@@ -36,7 +36,7 @@ class ModelController
     $paging->process($elementCount, Routing::getPageId());
 
     // išrenkame nurodyto puslapio markes
-    $data = models::getModelList($paging->size, $paging->first);
+    $data = ModelRepository::getModelList($paging->size, $paging->first);
 
     $template = Template::getInstance();
 
@@ -57,12 +57,12 @@ class ModelController
     // If entered data was valid
     if ($data) {
       // Find max ID in the database
-      $latestId = models::getMaxIdOfModel();
+      $latestId = ModelRepository::getMaxIdOfModel();
       // Increment it by one
       $data['id'] = $latestId + 1;
 
       // Insert row into database
-      models::insertModel($data);
+      ModelRepository::insertModel($data);
 
       // Redirect back to the list
       Routing::redirect(Routing::getModule(), 'list');
@@ -74,7 +74,7 @@ class ModelController
   public function editAction() {
     $id = Routing::getId();
 
-    $model = models::getModel($id);
+    $model = ModelRepository::getModel($id);
     if ($model == false) {
       Routing::redirect(Routing::getModule(), 'list', 'id_error=1');
       return;
@@ -90,7 +90,7 @@ class ModelController
       $data['id'] = $id;
 
       // Update it in database
-      models::updateModel($data);
+      ModelRepository::updateModel($data);
 
       // Redirect back to the list
       Routing::redirect(Routing::getModule(), 'list');
@@ -101,7 +101,7 @@ class ModelController
 
   private function showForm() {
     $template = Template::getInstance();
-    $template->assign('Brands', Brands::getBrandList());
+    $template->assign('Brands', BrandRepository::getBrandList());
     $template->assign('required', $this->required);
     $template->assign('maxLengths', $this->maxLengths);
     $template->setView("model_form");
@@ -138,7 +138,7 @@ class ModelController
     $id = Routing::getId();
 
     // remove Model
-    $err = (models::deleteModel($id)) ? '' : 'delete_error=1';
+    $err = (ModelRepository::deleteModel($id)) ? '' : 'delete_error=1';
 
     // redirect back to list page
     Routing::redirect(Routing::getModule(), 'list', $err);

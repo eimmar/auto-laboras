@@ -1,6 +1,7 @@
 <?php
-namespace Model;
+namespace Repository;
 
+use Model\Car;
 use PDOException;
 use Utils\Mysql;
 
@@ -10,45 +11,47 @@ use Utils\Mysql;
  * @author ISK
  */
 
-class Cars extends Entity
+class CarRepository extends EntityRepository
 {
+
+    protected function setUpFields(): void
+    {
+        $this->fields = [
+            'id',
+            'date_manufactured',
+            'weight_kg',
+            'price',
+            'is_road_legal',
+            'seats',
+            'top_speed_kph',
+            'drive_wheels',
+            'body_type',
+            'engine_id',
+            'model_id',
+            'gearbox_id',
+        ];
+    }
 
     /**
      * Automobilio išrinkimas
      * @param int $id
-     * @return array|bool
+     * @return Car|bool
      */
-    public function getEntity($id)
+    public function getModel($id)
     {
-        $query = "SELECT
-        `id`,
-        `valstybinis_nr`,
-        `pagaminimo_data`,
-        `rida`,
-        `radijas`,
-        `grotuvas`,
-        `kondicionierius`,
-        `vietu_skaicius`,
-        `registravimo_data`,
-        `verte`,
-        `pavaru_deze`,
-        `degalu_tipas`,
-        `kebulas`,
-        `bagazo_dydis`,
-        `busena`,
-        `fk_modelis` AS `modelis`
-      FROM `" . DB_PREFIX . "automobiliai`
-      WHERE `id` = ?";
+        $query = "SELECT" . implode(',', $this->getFields()) . "FROM `" . $this->getTableName() . "WHERE `id` = ?";
 
         $stmt = Mysql::getInstance()->prepare($query);
-        $stmt->execute(array($id));
+        $stmt->execute([$id]);
         $data = $stmt->fetchAll();
 
         if (count($data) == 0) {
             return false;
         }
 
-        return $data[0];
+        $model = get_class($this->entity);
+
+        return $this->hydrateObject($data, new $model());
     }
 
 
@@ -56,9 +59,9 @@ class Cars extends Entity
      * Automobilių sąrašo išrinkimas
      * @param int $limit
      * @param int $offset
-     * @return array
+     * @return Car[]
      */
-    public function getEntityList($limit = null, $offset = null): array
+    public function getModels($limit = null, $offset = null): array
     {
         $query = "SELECT
         `" . DB_PREFIX . "automobiliai`.`id`,
@@ -148,33 +151,6 @@ class Cars extends Entity
         $stmt = mysql::getInstance()->query($query);
         $data = $stmt->fetchAll();
         return $data;
-    }
-
-    protected function setUpFields(): void
-    {
-        $this->fields = [
-            'id',
-            'valstybinis_nr',
-            'pagaminimo_data',
-            'rida',
-            'radijas',
-            'grotuvas',
-            'kondicionierius',
-            'vietu_skaicius',
-            'registravimo_data',
-            'verte',
-            'pavaru_deze',
-            'degalu_tipas',
-            'kebulas',
-            'bagazo_dydis',
-            'busena',
-            'fk_modelis'
-        ];
-    }
-
-    protected function setUpTableName(): void
-    {
-        $this->tableName = DB_PREFIX . '.' . 'automobiliai';
     }
 }
 

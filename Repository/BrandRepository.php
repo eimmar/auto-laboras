@@ -6,7 +6,7 @@ namespace Model;
  * @author ISK
  */
 
-class Brands {
+class BrandRepository {
 
   /**
    * Markės išrinkimas

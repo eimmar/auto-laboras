@@ -1,7 +1,7 @@
 <?php
 namespace Controllers;
 
-use Model\Brands;
+use Model\BrandRepository;
 use Utils\Paging;
 use Utils\Routing;
 use Utils\Template;
@@ -24,7 +24,7 @@ class BrandController
     public function listAction()
     {
         // suskaičiuojame bendrą įrašų kiekį
-        $elementCount = Brands::getBrandListCount();
+        $elementCount = BrandRepository::getBrandListCount();
 
         // sukuriame puslapiavimo klasės objektą
         $paging = new Paging(NUMBER_OF_ROWS_IN_PAGE);
@@ -33,7 +33,7 @@ class BrandController
         $paging->process($elementCount, Routing::getPageId());
 
         // išrenkame nurodyto puslapio markes
-        $data = Brands::getBrandList($paging->size, $paging->first);
+        $data = BrandRepository::getBrandList($paging->size, $paging->first);
 
         $template = Template::getInstance();
 
@@ -55,12 +55,12 @@ class BrandController
         // If entered data was valid
         if ($data) {
             // Find max ID in the database
-            $latestId = Brands::getMaxIdOfBrand();
+            $latestId = BrandRepository::getMaxIdOfBrand();
             // Increment it by one
             $data['id'] = $latestId + 1;
 
             // Insert row into database
-            Brands::insertBrand($data);
+            BrandRepository::insertBrand($data);
 
             // Redirect back to the list
             Routing::redirect(Routing::getModule(), 'list');
@@ -73,7 +73,7 @@ class BrandController
     {
         $id = Routing::getId();
 
-        $brand = Brands::getBrand($id);
+        $brand = BrandRepository::getBrand($id);
         if ($brand == false) {
             Routing::redirect(Routing::getModule(), 'list', 'id_error=1');
             return;
@@ -89,7 +89,7 @@ class BrandController
             $data['id'] = $id;
 
             // Update it in database
-            Brands::updateBrand($data);
+            BrandRepository::updateBrand($data);
 
             // Redirect back to the list
             Routing::redirect(Routing::getModule(), 'list');
@@ -139,7 +139,7 @@ class BrandController
         $id = Routing::getId();
 
         // šaliname markę
-        $err = (Brands::deleteBrand($id)) ? '' : 'delete_error=1';
+        $err = (BrandRepository::deleteBrand($id)) ? '' : 'delete_error=1';
 
         // nukreipiame į markių puslapį
         Routing::redirect(Routing::getModule(), 'list', $err);

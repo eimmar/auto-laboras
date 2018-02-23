@@ -7,7 +7,7 @@ namespace Model;
  * @author ISK
  */
 
-class Models {
+class ModelRepository {
 
   /**
    * Modelio išrinkimas

@@ -1,12 +1,9 @@
 <?php
 namespace Controllers;
 
-use Model\Cars;
-use Model\Models;
-use Utils\Paging;
-use Utils\Routing;
+use Model\CarRepository;
+use Model\ModelRepository;
 use Utils\Template;
-use Utils\Validator;
 
 class CarController extends BaseController
 {
@@ -56,12 +53,12 @@ class CarController extends BaseController
 
         $template = Template::getInstance();
 
-        $brandsModels = Models::getBrandsAndModels();
-        $gearboxes = Cars::getGearboxList();
-        $fueltypes = Cars::getFuelTypeList();
-        $bodytypes = Cars::getBodyTypeList();
-        $luggage = Cars::getLuggageTypeList();
-        $car_states = Cars::getCarStateList();
+        $brandsModels = ModelRepository::getBrandsAndModels();
+        $gearboxes = CarRepository::getGearboxList();
+        $fueltypes = CarRepository::getFuelTypeList();
+        $bodytypes = CarRepository::getBodyTypeList();
+        $luggage = CarRepository::getLuggageTypeList();
+        $car_states = CarRepository::getCarStateList();
 
         $template->assign('brandsModels', $brandsModels);
         $template->assign('gearboxes', $gearboxes);
@@ -88,7 +85,7 @@ class CarController extends BaseController
 
     protected function setUpBaseEntity()
     {
-        $this->baseEntity = new Cars();
+        $this->baseEntity = new CarRepository();
     }
 };
 

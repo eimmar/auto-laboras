@@ -9,7 +9,7 @@
 namespace Controllers;
 
 
-use Model\Entity;
+use Model\EntityRepository;
 use Utils\Paging;
 use Utils\Routing;
 use Utils\Template;
@@ -131,14 +131,14 @@ abstract class BaseController
     }
 
     /**
-     * @var Entity
+     * @var EntityRepository
      */
     protected $baseEntity;
 
     /**
-     * @return Entity
+     * @return EntityRepository
      */
-    public function getBaseEntity(): Entity
+    public function getBaseEntity(): EntityRepository
     {
         return $this->baseEntity;
     }
@@ -156,7 +156,7 @@ abstract class BaseController
         $elementCount = $this->getBaseEntity()->getListCount();
         $paging = new Paging(NUMBER_OF_ROWS_IN_PAGE);
         $paging->process($elementCount, Routing::getPageId());
-        $data = $this->getBaseEntity()->getEntityList($paging->size, $paging->first);
+        $data = $this->getBaseEntity()->getModels($paging->size, $paging->first);
 
         $template = Template::getInstance();
         $template->assign('data', $data);
@@ -189,7 +189,7 @@ abstract class BaseController
     public function editAction()
     {
         $id = Routing::getId();
-        $entity = $this->getBaseEntity()->getEntity($id);
+        $entity = $this->getBaseEntity()->getModel($id);
 
         if ($entity == false) {
             Routing::redirect(Routing::getModule(), 'list', 'id_error=1');
