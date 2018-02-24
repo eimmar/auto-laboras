@@ -48,9 +48,9 @@ class CarController extends BaseController
             );
     }
 
-    protected function showForm()
+    protected function showForm($entity)
     {
-        parent::showForm();
+        parent::showForm($entity);
 
         $template = Template::getInstance();
 

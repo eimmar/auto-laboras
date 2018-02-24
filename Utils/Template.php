@@ -7,39 +7,48 @@ namespace Utils;
  * @author V.Sutkus, <v.sutkus@ktu.edu>, IF-4/2
  */
 
-class Template {
+class Template
+{
 
-  private static $instance = null;
+    private static $instance = null;
 
-  private $enabled = true;
-  private $data = array();
-  private $view;
+    private $enabled = true;
+    private $data = array();
+    private $view;
 
-  public static function getInstance() {
-    if (self::$instance === null)
-      self::$instance = new Template();
+    public static function getInstance()
+    {
+        if (self::$instance === null)
+            self::$instance = new Template();
 
-    return self::$instance;
-  }
+        return self::$instance;
+    }
 
-  public function setView($view) {
-    $this->view = $view;
-  }
+    public function setView($view)
+    {
+        $this->view = $view;
+        return $this;
+    }
 
-  public function render() {
-    if (!$this->enabled || empty($this->view))
-      return;
+    public function render()
+    {
+        if (!$this->enabled || empty($this->view))
+            return;
 
-    extract($this->data);
+        extract($this->data);
 
-    require('view/' . $this->view . '.php');
-  }
+        require('view/' . $this->view . '.php');
+    }
 
-  public function assign($name, $variable) {
-    $this->data[$name] = $variable;
-  }
+    public function assign($name, $variable)
+    {
+        $this->data[$name] = $variable;
+        return $this;
+    }
 
-  public function disableRendering() {
-    $this->enabled = false;
-  }
+    public function disableRendering()
+    {
+        $this->enabled = false;
+        return $this;
+    }
 };

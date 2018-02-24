@@ -6,6 +6,9 @@ namespace Utils;
  * @package pork
  */
 
+use Form\BaseForm;
+use Form\Field;
+
 
 /**
  * Pork.FormValidator
@@ -19,7 +22,7 @@ namespace Utils;
  */
 class Validator
 {
-    public $regexes = Array(
+    public $regexes = [
 		'date' => "^[0-9]{4}[-/][0-9]{1,2}[-/][0-9]{1,2}\$", // 2016-01-15
 		'datetime' => "^[0-9]{4}[-/][0-9]{1,2}[-/][0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}(:[0-9]{1,2})?\$", // 2016-01-15 12:12, 2016-01-15 12:12:00
 		'positivenumber' => "^[0-9\.]+\$", // teigiami sveikieji skaičiai bei skaičiai su kableliu (pvz.: 25.14)
@@ -36,193 +39,115 @@ class Validator
 		 * boolen,
 		 * ip,
 		 * url*/
-    );
-	
-    private $validations, $mandatories, $lengths, $errors, $corrects, $fields;
+    ];
 
-	/**
-	 * Konstruktorius
-	 * @param type $validations
-	 * @param type $mandatories
-	 */
-    public function __construct($validations = array(), $mandatories = array(), $lengths = array()) {
-    	$this->validations = $validations;
-    	$this->mandatories = $mandatories;
-		$this->lengths = $lengths;
-    	$this->errors = array();
-    	$this->corrects = array();
-    }
+    /**
+     * @var array
+     */
+    private $errors;
+
+//    /**
+//     * @var array
+//     */
+//    private $corrects;
+
+    /**
+     * @var Field[]
+     */
+    private $fields;
 
     /**
 	 * Patikrinamas reikšių masyvas
-	 * @param type $items
-	 * @return type
+     * @param BaseForm $form
+	 * @return bool
 	 */
-    public function validate($items) {
-    	$this->fields = $items;
-    	$havefailures = false;
-    	foreach($items as $key=>$val) {
-			if(((!is_array($val) && strlen($val) == 0) || key_exists($key, $this->validations) === false) && array_search($key, $this->mandatories) === false) {
-				$this->corrects[] = $key;
-				continue;
+    public function validate($form)
+    {
+        $this->fields = $form->getFields();
+    	$haveFailures = false;
+
+    	foreach ($this->fields as $field) {
+
+            $result = $this->validateItem($field);
+			if ($result === true) {
+                if (strlen($field->getValue()) > $field->getMaxLength()) {
+                    $result = false;
+                }
 			}
 
-			$result = false;
-			if(is_array($val)) {
-				$result = $this->validateArray($val, $key);
-			} else {
-				$result = $this->validateItem($val, $this->validations[$key]);
-			}
-
-			if($result === true) {
-				if(key_exists($key, $this->lengths)) {
-					if(strlen($val) > $this->lengths[$key]) {
-						$result = false;
-					}
-				}
-			}
-
-			if($result === false) {
-				$havefailures = true;
-				$this->addError($key, $this->validations[$key]);
-			} else {
-				$this->corrects[] = $key;
+			if ($result === false) {
+				$haveFailures = true;
+				$field->setHasError(true);
 			}
     	}
 
-    	return(!$havefailures);
-    }
-	
-	private function validateArray($array, $key) {
-		$havefailures = false;
-		if((key_exists($key, $this->validations) === false) && array_search($key, $this->mandatories) === false) {
-			$this->corrects[] = $key;
-			return false;
-		}
-		
-		foreach($array as $item) {
-			$result = false;
-			if($item == "" && array_search($key, $this->mandatories) === false) {
-				$result = true;
-			} else {
-				$result = $this->validateItem($item, $this->validations[$key]);
-			}
-
-			if($result === false) {
-				$havefailures = true;
-				$this->addError($key, $this->validations[$key]);
-			}
-		}
-		
-		if($havefailures == false) {
-			$this->corrects[] = $key;
-		}
-		
-		return !$havefailures;
-	}
-	
-    /**
-	 * Gaunamas klaidos pranešimas
-	 * @return type
-	 */
-    public function getErrorHTML() {
-    	if(!empty($this->errors)) {
-    		$errors = array();
-    		foreach($this->errors as $key=>$val) {
-				$errors[] = "<li>" . $key . "</li>";
-			}
-    		$output = "<ul>" . implode('', $errors) . "</ul>";
-    	}
-    	
-    	return($output);
-    }
-
-	/**
-	 * Į klaidų masyvą įtraukiama klaida
-	 * @param type $field
-	 * @param type $type
-	 */
-    private function addError($field, $type='string') {
-    	$this->errors[$field] = $type;
+    	return (!$haveFailures);
     }
 
     /**
 	 * Pagal nurodytą tipą patikrinama viena reikšmė
-	 * @param type $var
-	 * @param type $type
-	 * @return type
+	 * @param Field $field
+	 * @return bool
 	 */
-    public function validateItem($var, $type) {
-		if(array_key_exists($type, $this->regexes)) {
-    		$returnval =  filter_var($var, FILTER_VALIDATE_REGEXP, array("options"=> array("regexp"=>'!'.$this->regexes[$type].'!i'))) !== false;
-    		return($returnval);
-    	}
-    	$filter = false;
-    	switch($type) {
-    		case 'email':
-    			$var = substr($var, 0, 254);
-    			$filter = FILTER_VALIDATE_EMAIL;	
-    		break;
-    		case 'int':
-    			$filter = FILTER_VALIDATE_INT;
-    		break;
-    		case 'float':
-    			$filter = FILTER_VALIDATE_FLOAT;
-    		break;
-    		case 'boolean':
-    			$filter = FILTER_VALIDATE_BOOLEAN;
-    		break;
-    		case 'ip':
-    			$filter = FILTER_VALIDATE_IP;
-    		break;
-    		case 'url':
-    			$filter = FILTER_VALIDATE_URL;
-    		break;
-    	}
-    	return ($filter === false) ? false : filter_var($var, $filter) !== false ? true : false;
+    public function validateItem($field)
+    {
+        $value = $field->getValue();
+
+        if (array_key_exists($field->getValidation(), $this->regexes)) {
+            $return =  filter_var(
+                $value,
+                FILTER_VALIDATE_REGEXP,
+                ["options" =>
+                    [
+                        "regexp" => '!' . $this->regexes[$field->getValidation()] . '!i'
+                    ]
+                ]) !== false;
+
+            return ($return);
+        }
+
+        if ($field->isRequired() && strlen(trim($field->getValue())) === 0) {
+            return false;
+        }
+
+        $filter = false;
+        switch ($field->getValidation()) {
+            case 'email':
+                $value = substr($value, 0, 254);
+                $filter = FILTER_VALIDATE_EMAIL;
+                break;
+            case 'int':
+                $filter = FILTER_VALIDATE_INT;
+                break;
+            case 'float':
+                $filter = FILTER_VALIDATE_FLOAT;
+                break;
+            case 'boolean':
+                $filter = FILTER_VALIDATE_BOOLEAN;
+                break;
+            case 'ip':
+                $filter = FILTER_VALIDATE_IP;
+                break;
+            case 'url':
+                $filter = FILTER_VALIDATE_URL;
+                break;
+        }
+
+        return ($filter === false) ? true : filter_var($value, $filter) !== false;
     }
 
-	function preparePostFieldsForSQL() {
-		$data = array();
+    /**
+     * @return array
+     */
+	public function preparePostFieldsForSQL()
+    {
+		$data = [];
 
-		foreach($this->fields as $key=>$val) {
-			$tmp = null;
-			if(!is_array($val)) {
-				$tmp = $this->html_escape($val);
-			} else {
-				foreach($val as $key2 => $val2) {
-					$tmp[] = $this->html_escape($val2);
-				}
-			}
-			
-			if(!in_array($key, $this->mandatories) && ($tmp == '' || $tmp == array())) {
-				$data[$key] = '';
-			} else {
-				if(!is_array($tmp)) {
-					$data[$key] = $tmp;
-				} else {
-					$data[$key] = $tmp;
-				}
-				
-			}
+		foreach ($this->fields as $field) {
+			$key = preg_replace('@([A-Z])@', '_$1', $field->getName());
+			$data[strtolower($key)] = htmlentities($field->getValue());
 		}
 
-    return $data;
+		return $data;
 	}
-
-    /*
-     * Escape HTML entities, to prevent XSS
-     */
-  function html_escape($input) {
-    $data = str_replace('&', '&amp;', $input);
-    $data = str_replace(
-      array('<', '>', '"', "'", "/"),
-      array('&lt;', '&gt;', '&quot;', '&#x27;', '&#x2f;'),
-      $data
-    );
-
-    return $data;
-  }
-	
 }
-

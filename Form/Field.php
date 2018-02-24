@@ -42,9 +42,14 @@ class Field
     private $options;
 
     /**
-     * @var string|null
+     * @var mixed
      */
-    private $defaultValue;
+    private $value;
+
+    /**
+     * @var bool
+     */
+    private $hasError;
 
     /**
      * @var string|null
@@ -59,6 +64,7 @@ class Field
     public function __construct()
     {
         $this->isRequired = false;
+        $this->hasError = false;
     }
 
     /**
@@ -152,6 +158,24 @@ class Field
     }
 
     /**
+     * @return bool
+     */
+    public function hasError(): bool
+    {
+        return $this->hasError;
+    }
+
+    /**
+     * @param bool $hasError
+     * @return Field
+     */
+    public function setHasError(bool $hasError): Field
+    {
+        $this->hasError = $hasError;
+        return $this;
+    }
+
+    /**
      * @return array|null
      */
     public function getOptions(): ?array
@@ -170,20 +194,20 @@ class Field
     }
 
     /**
-     * @return null|string
+     * @return mixed
      */
-    public function getDefaultValue(): ?string
+    public function getValue()
     {
-        return $this->defaultValue;
+        return $this->value;
     }
 
     /**
-     * @param null|string $defaultValue
+     * @param mixed $value
      * @return Field
      */
-    public function setDefaultValue(?string $defaultValue): Field
+    public function setValue($value): Field
     {
-        $this->defaultValue = $defaultValue;
+        $this->value = $value;
         return $this;
     }
 

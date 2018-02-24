@@ -9,11 +9,13 @@
 namespace Controllers;
 
 
+use Form\BaseForm;
+use Model\Entity;
 use Repository\BaseRepository;
+use Utils\Message;
 use Utils\Paging;
 use Utils\Routing;
 use Utils\Template;
-use Utils\Validator;
 
 abstract class BaseController
 {
@@ -21,21 +23,6 @@ abstract class BaseController
      * @var string
      */
     private $defaultAction;
-
-    /**
-     * @var array
-     */
-    protected $required;
-
-    /**
-     * @var array
-     */
-    protected $maxLengths;
-
-    /**
-     * @var array
-     */
-    protected $validations;
 
     /**
      * @var string
@@ -58,6 +45,17 @@ abstract class BaseController
     }
 
     /**
+     * @param Entity $entity
+     * @param bool $isEdit
+     * @return BaseForm
+     */
+    protected function getForm($entity, bool $isEdit = false)
+    {
+        $form = '\\Form\\' . ucfirst($this->getControllerPrefix()) . 'Form';
+        return new $form($entity, $isEdit);
+    }
+
+    /**
      * @return string
      */
     public function getDefaultAction(): string
@@ -73,58 +71,6 @@ abstract class BaseController
     {
         $this->defaultAction = $defaultAction;
         return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getRequired(): array
-    {
-        return $this->required;
-    }
-
-    /**
-     * @param array $required
-     * @return BaseController
-     */
-    public function setRequired(array $required): BaseController
-    {
-        $this->required = $required;
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getMaxLengths(): array
-    {
-        return $this->maxLengths;
-    }
-
-    /**
-     * @param array $maxLengths
-     * @return BaseController
-     */
-    public function setMaxLengths(array $maxLengths): BaseController
-    {
-        $this->maxLengths = $maxLengths;
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getValidations(): array
-    {
-        return $this->validations;
-    }
-
-    /**
-     * @param array $validations
-     */
-    public function setValidations(array $validations): void
-    {
-        $this->validations = $validations;
     }
 
     /**
@@ -175,75 +121,39 @@ abstract class BaseController
 
     public function createAction()
     {
-        $data = $this->validateInput();
+        $entity = $this->getRepository()->createEntity();
+        $form = $this->getForm($entity, false)->validate();
+        $template = Template::getInstance();
 
-        if ($data) {
-            $latestId = $this->getRepository()->getMaxId();
-            $data['id'] = $latestId + 1;
+        if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->getRepository()->insertEntity($data);
+            $this->getRepository()->insertEntity($form->getRawFields());
             Routing::redirect(Routing::getModule(), 'list');
         } else {
-            $this->showForm();
+            $template
+                ->assign('form', $form)
+                ->setView('entity_form');
         }
     }
 
     public function editAction()
     {
-        $id = Routing::getId();
-        $entity = $this->getRepository()->getModel($id);
+        $entity = $this->getRepository()->getModel(Routing::getId());
+        $template = Template::getInstance();
 
-        if ($entity == false) {
+        if ($entity === false) {
             Routing::redirect(Routing::getModule(), 'list', 'id_error=1');
-            return;
         }
 
-        $template = Template::getInstance();
-        $template->assign('fields', $entity);
-
-        $data = $this->validateInput();
-
-        if ($data) {
-            $data['id'] = $id;
-            $this->getRepository()->updateEntity($data);
+        $form = $this->getForm($entity, true)->validate();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getRepository()->updateEntity($entity->getId(), $form->getRawFields());
             Routing::redirect(Routing::getModule(), 'list');
         } else {
-            $this->showForm();
+            $template
+                ->assign('form', $form)
+                ->setView('entity_form');
         }
-    }
-
-    protected function showForm()
-    {
-        $template = Template::getInstance();
-        $template->assign('required', $this->required);
-        $template->assign('maxLengths', $this->maxLengths);
-
-        $form = '\\Form\\' . ucfirst($this->getControllerPrefix()) . 'Form';
-        $model = '\\Model\\' . ucfirst($this->getControllerPrefix());
-        $template->assign('form', new $form(new $model()));
-        $template->setView($this->getControllerPrefix() . '_form');
-    }
-
-    protected function validateInput()
-    {
-        if (empty($_POST['submit'])) {
-            return false;
-        }
-
-        $validator = new Validator($this->validations, $this->required, $this->maxLengths);
-
-        if (!$validator->validate($_POST)) {
-            $template = Template::getInstance();
-
-            $template->assign('fields', $_POST);
-            $formErrors = $validator->getErrorHTML();
-            $template->assign('formErrors', $formErrors);
-
-            return false;
-        }
-
-        $data = $validator->preparePostFieldsForSQL();
-        return $data;
     }
 
     public function deleteAction()

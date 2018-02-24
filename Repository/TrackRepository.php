@@ -34,7 +34,6 @@ class TrackRepository extends BaseRepository
         return parent::getModel($id);
     }
 
-
     /**
      * @param int|null $limit
      * @param int|null $offset

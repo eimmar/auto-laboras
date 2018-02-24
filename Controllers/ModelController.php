@@ -124,7 +124,7 @@ class ModelController
       $template->assign('fields', $_POST);
 
       // Get error message
-      $formErrors = $validator->getErrorHTML();
+      $formErrors = $validator->getErrors();
       $template->assign('formErrors', $formErrors);
       return false;
     }

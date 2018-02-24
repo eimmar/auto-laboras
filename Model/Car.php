@@ -71,11 +71,6 @@ class Car implements Entity
      */
     private $gearbox;
 
-    public function getFields(): array
-    {
-        // TODO: Implement getFields() method.
-    }
-
     /**
      * @return int
      */

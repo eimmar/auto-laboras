@@ -28,7 +28,6 @@ class ManufacturerRepository extends BaseRepository
         return parent::getModel($id);
     }
 
-
     /**
      * @param int|null $limit
      * @param int|null $offset
@@ -40,4 +39,3 @@ class ManufacturerRepository extends BaseRepository
     }
 
 }
-

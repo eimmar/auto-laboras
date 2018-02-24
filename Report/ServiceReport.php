@@ -49,7 +49,7 @@ class ServiceReport
             $this->showForm();
 
             // gauname klaidų pranešimą
-            $formErrors = $validator->getErrorHTML();
+            $formErrors = $validator->getErrors();
 
             // gauname įvestus laukus
             $fields = $_POST;

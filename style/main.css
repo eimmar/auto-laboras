@@ -564,3 +564,11 @@ fieldset .submit {
 .reportList li {
 	margin-bottom: 20px;
 }
+
+.message {
+    margin: 16px;
+}
+
+.success {
+    background-color: rgba(46, 252, 111, 0.4);
+}

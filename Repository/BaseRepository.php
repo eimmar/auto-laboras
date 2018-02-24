@@ -238,31 +238,81 @@ abstract class BaseRepository
     {
         $query = 'SELECT COUNT(id) as amount FROM ' . $this->tableName;
         $stmt = Mysql::getInstance()->query($query);
-        $data = $stmt->fetchAll();
+        $data = $stmt->fetch();
 
-        return $data[0]['amount'];
+        return $data['amount'];
     }
 
     /**
      * @param array $data
+     * @return bool
      */
-    public function insertEntity($data)
+    public function insertEntity($data) : bool
     {
-        $query = 'INSERT INTO ' . $this->tableName . ' (' . implode(',', $this->getFieldsToInsert())
-            . ') VALUES' . $this->getFieldsPlaceHolder();
+        $cols = '';
+        $vals =  '';
 
-        $stmt = Mysql::getInstance()->prepare($query);
-        $stmt->execute([$data['id'], $data['pavadinimas']]);
+        foreach (array_keys($data) as $colName) {
+            $cols .= $colName . ', ';
+            $vals .= sprintf(':%s , ', $colName);
+        }
+
+        $query = sprintf(
+            'INSERT INTO %s (%s) VALUES (%s);',
+            $this->tableName,
+            trim($cols, ', '),
+            trim($vals, ', ')
+        );
+
+        try {
+            $stmt = Mysql::getInstance()->prepare($query);
+            $stmt->execute($data);
+        } catch (PDOException $e) {
+            return false;
+        }
+        return true;
     }
 
     /**
      * @param array $data
+     * @return Entity
      */
-    public function updateEntity($data)
+    public function createEntity($data = []) : Entity
     {
-        $query = 'UPDATE ' . $this->tableName . ' SET `pavadinimas` = ? WHERE id = ?';
+        $entity = clone $this->getEntity();
+
+        foreach ($data as $key => $value) {
+            $setData = 'set' . ucfirst($key);
+            $entity->$setData($value);
+        }
+
+        return $entity;
+    }
+
+    /**
+     * @param int $id
+     * @param array $data
+     * @return bool
+     */
+    public function updateEntity($id, $data) : bool
+    {
+        $query = sprintf('UPDATE %s SET ', $this->tableName);
+        foreach (array_keys($data) as $colName) {
+
+            $query .= sprintf(' %s = :%s , ', $colName, $colName);
+        }
+        $query = trim($query, ', ') . ' WHERE id = :id';
+
+        $data['id'] = $id;
+
         $stmt = Mysql::getInstance()->prepare($query);
-        $stmt->execute(array($data['pavadinimas'], $data['id']));
+        try {
+            $stmt->execute($data);
+        } catch (PDOException $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -271,34 +321,15 @@ abstract class BaseRepository
      */
     public function deleteEntity($id): bool
     {
-        $query = 'DELETE FROM ' . $this->tableName . ' WHERE `id` = ?';
+        $query = sprintf('DELETE FROM %s WHERE `id` = ?', $this->tableName);
         $stmt = Mysql::getInstance()->prepare($query);
 
         try {
-            $stmt->execute(array($id));
+            $stmt->execute([$id]);
         } catch (PDOException $e) {
             return false;
         }
 
         return true;
-    }
-
-
-    /**
-     * @return string
-     */
-    private function getFieldsPlaceHolder(): string
-    {
-        return '(' . trim(str_repeat('?, ', count($this->getFieldsToInsert())), ',') .  ')';
-    }
-
-    /**
-     * @return array
-     */
-    private function getFieldsToInsert(): array
-    {
-        return array_filter($this->getFields(), function ($field) {
-            return $field !== 'id';
-        });
     }
 }

@@ -28,34 +28,6 @@ class DriverRepository extends BaseRepository
         ];
     }
 
-//    protected function getModelSql()
-//    {
-//        $model = strtolower(get_class($this->entity)) . 's';
-//
-//        $selectCols = '';
-//        $joins = '';
-//
-//        foreach ($this->getFields() as $field) {
-//            $selectCols = $model . '.' . $field . ', ';
-//        }
-//
-//        /**
-//         * @var string $field
-//         * @var BaseRepository $repository
-//         */
-//        foreach ($this->getJoinFields() as $field => $repository) {
-//            foreach ($repository->getFields() as $field) {
-//                $selectCols .= $repository->getTableName() . '.' . $field . ', ';
-//            }
-//
-//            $joins .= ' LEFT JOIN ' . $repository->getTableName() .
-//                ' ON ' . $this->getTableName() . '.' . $field .' = ' . $repository->getTableName() . '.id ';
-//        }
-//
-//        return 'SELECT ' . trim($selectCols, ',') . ' FROM ' . $this->tableName . $joins;
-//
-//    }
-
     /**
      * @param int $id
      * @return Driver|bool
