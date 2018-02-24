@@ -1,32 +1,31 @@
 <?php
-require('header.php');
+require('view/header.php');
 
 use Form\ManufacturerForm;
 use Utils\Routing;
 
+/** @var ManufacturerForm $form */
 ?>
     <ul id="pagePath">
         <li><a href="<?php echo Routing::getURL(); ?>">Pradžia</a></li>
-        <li><a href="<?php echo Routing::getURL($module); ?>">Gamintojai</a></li>
+        <li><a href="<?php echo Routing::getURL($module); ?>"><?php echo $form->getName(); ?></a></li>
         <li>
             <?php if (!empty($id)) : ?>
-                Gamintojo redagavimas
+                Redaguoti
             <?php else : ?>
-                Naujas gamintojas
+                Naujas
             <?php endif; ?>
         </li>
     </ul>
     <div class="float-clear"></div>
     <div id="formContainer">
-        <?php require("formErrors.php"); ?>
+        <?php require('view/formErrors.php'); ?>
         <form action="" method="post">
             <fieldset>
-                <legend>Gamintojo informacija</legend>
+                <legend>Informacija</legend>
 
 
-                <?php
-                /** @var ManufacturerForm $form */
-                foreach ($form->getFields() as $field) : ?>
+                <?php foreach ($form->getFields() as $field) : ?>
                     <p>
                         <label class="field"
                                for="<?php echo $field->getName(); ?>">
@@ -55,5 +54,5 @@ use Utils\Routing;
         </form>
     </div>
 <?php
-require('footer.php');
+require('view/footer.php');
 

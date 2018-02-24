@@ -1,13 +1,13 @@
 <?php
-require('header.php');
+require('view/header.php');
 
-use Model\Track;
+use Model\Manufacturer;
 use Utils\Routing;
 
 ?>
     <ul id="pagePath">
         <li><a href="<?php echo Routing::getURL(); ?>">Pradžia</a></li>
-        <li>Trasos</li>
+        <li>Gamintojai</li>
     </ul>
     <div id="actions">
         <a href='<?php echo Routing::getURL($module, 'create'); ?>'>Naujas</a>
@@ -16,13 +16,13 @@ use Utils\Routing;
 
 <?php if (!empty($delete_error)) : ?>
     <div class="errorBox">
-        Si trasa negali buti pasalintas.
+        Sis gamintojas negali buti pasalintas.
     </div>
 <?php endif; ?>
 
 <?php if (!empty($id_error)) : ?>
     <div class="errorBox">
-        Trasa nerasta!
+        Gamintojas nerastas!
     </div>
 <?php endif; ?>
 
@@ -30,24 +30,26 @@ use Utils\Routing;
         <tr>
             <th>ID</th>
             <th>Pavadinimas</th>
-            <th>Atstumas</th>
-            <th>Vietove</th>
-            <th>Atidarimo data</th>
+            <th>Ikurejas(-ai)</th>
+            <th>Bustine</th>
+            <th>Darbuotoju skaicius</th>
+            <th>Ikurimo data</th>
             <th></th>
         </tr>
         <?php
         /**
          * @var int $key
-         * @var Track $val
+         * @var Manufacturer $val
          */
         foreach($data as $key => $val) : ?>
 
             <tr>
                 <td><?php echo $val->getId(); ?></td>
                 <td><?php echo $val->getName(); ?></td>
-                <td><?php echo $val->getDistanceMeters(); ?></td>
-                <td><?php echo $val->getLocation() . ' m'; ?></td>
-                <td><?php echo $val->getOpeningDate()->format('Y-m-d'); ?></td>
+                <td><?php echo $val->getFounder(); ?></td>
+                <td><?php echo $val->getHeadquarters(); ?></td>
+                <td><?php echo $val->getWorkersCount(); ?></td>
+                <td><?php echo $val->getDateFounded()->format('Y-m-d'); ?></td>
                 <td>
                     <a href="#"
                        onclick="showConfirmDialog('<?php echo $module; ?>', '<?php echo $val->getId(); ?>')"
@@ -66,6 +68,5 @@ use Utils\Routing;
 
 <?php
 // įtraukiame puslapių šabloną
-require('paging.php');
-require('footer.php');
-
+require('view/paging.php');
+require('view/footer.php');

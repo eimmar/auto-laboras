@@ -116,7 +116,7 @@ abstract class BaseController
         if (!empty($_GET['id_error']))
             $template->assign('id_error', true);
 
-        $template->setView($this->getControllerPrefix() . '_list');
+        $template->setView('list/' . $this->getControllerPrefix() . '_list');
     }
 
     public function createAction()
@@ -132,7 +132,7 @@ abstract class BaseController
         } else {
             $template
                 ->assign('form', $form)
-                ->setView('entity_form');
+                ->setView('form/entity_form');
         }
     }
 
@@ -152,7 +152,7 @@ abstract class BaseController
         } else {
             $template
                 ->assign('form', $form)
-                ->setView('entity_form');
+                ->setView('form/entity_form');
         }
     }
 

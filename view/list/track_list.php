@@ -1,13 +1,13 @@
 <?php
-require('header.php');
+require('view/header.php');
 
-use Model\Team;
+use Model\Track;
 use Utils\Routing;
 
 ?>
     <ul id="pagePath">
         <li><a href="<?php echo Routing::getURL(); ?>">Pradžia</a></li>
-        <li>Komandos</li>
+        <li>Trasos</li>
     </ul>
     <div id="actions">
         <a href='<?php echo Routing::getURL($module, 'create'); ?>'>Naujas</a>
@@ -16,13 +16,13 @@ use Utils\Routing;
 
 <?php if (!empty($delete_error)) : ?>
     <div class="errorBox">
-        Si komanda negali buti pasalinta.
+        Si trasa negali buti pasalintas.
     </div>
 <?php endif; ?>
 
 <?php if (!empty($id_error)) : ?>
     <div class="errorBox">
-        Komanda nerasta!
+        Trasa nerasta!
     </div>
 <?php endif; ?>
 
@@ -30,20 +30,24 @@ use Utils\Routing;
         <tr>
             <th>ID</th>
             <th>Pavadinimas</th>
-            <th>Metinis Biudzetas</th>
+            <th>Atstumas</th>
+            <th>Vietove</th>
+            <th>Atidarimo data</th>
             <th></th>
         </tr>
         <?php
         /**
          * @var int $key
-         * @var Team $val
+         * @var Track $val
          */
         foreach($data as $key => $val) : ?>
 
             <tr>
                 <td><?php echo $val->getId(); ?></td>
                 <td><?php echo $val->getName(); ?></td>
-                <td><?php echo $val->getYearlyBudget() . ' EUR'; ?></td>
+                <td><?php echo $val->getDistanceMeters(); ?></td>
+                <td><?php echo $val->getLocation() . ' m'; ?></td>
+                <td><?php echo $val->getOpeningDate()->format('Y-m-d'); ?></td>
                 <td>
                     <a href="#"
                        onclick="showConfirmDialog('<?php echo $module; ?>', '<?php echo $val->getId(); ?>')"
@@ -62,6 +66,6 @@ use Utils\Routing;
 
 <?php
 // įtraukiame puslapių šabloną
-require('paging.php');
-require('footer.php');
+require('view/paging.php');
+require('view/footer.php');
 

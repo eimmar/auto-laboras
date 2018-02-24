@@ -1,13 +1,13 @@
 <?php
-require('header.php');
+require('view/header.php');
 
-use Model\Manufacturer;
+use Model\Driver;
 use Utils\Routing;
 
 ?>
     <ul id="pagePath">
         <li><a href="<?php echo Routing::getURL(); ?>">Pradžia</a></li>
-        <li>Gamintojai</li>
+        <li>Vairuotojai</li>
     </ul>
     <div id="actions">
         <a href='<?php echo Routing::getURL($module, 'create'); ?>'>Naujas</a>
@@ -16,40 +16,42 @@ use Utils\Routing;
 
 <?php if (!empty($delete_error)) : ?>
     <div class="errorBox">
-        Sis gamintojas negali buti pasalintas.
+        Sis vairuotojas negali buti pasalintas.
     </div>
 <?php endif; ?>
 
 <?php if (!empty($id_error)) : ?>
     <div class="errorBox">
-        Gamintojas nerastas!
+        Vairuotojas nerastas!
     </div>
 <?php endif; ?>
 
     <table>
         <tr>
             <th>ID</th>
-            <th>Pavadinimas</th>
-            <th>Ikurejas(-ai)</th>
-            <th>Bustine</th>
-            <th>Darbuotoju skaicius</th>
-            <th>Ikurimo data</th>
+            <th>Vardas</th>
+            <th>Pavarde</th>
+            <th>Amzius</th>
+            <th>Vairavimo stazas</th>
+            <th>Lytis</th>
+            <th>Komanda</th>
             <th></th>
         </tr>
         <?php
         /**
          * @var int $key
-         * @var Manufacturer $val
+         * @var Driver $val
          */
         foreach($data as $key => $val) : ?>
 
             <tr>
                 <td><?php echo $val->getId(); ?></td>
-                <td><?php echo $val->getName(); ?></td>
-                <td><?php echo $val->getFounder(); ?></td>
-                <td><?php echo $val->getHeadquarters(); ?></td>
-                <td><?php echo $val->getWorkersCount(); ?></td>
-                <td><?php echo $val->getDateFounded()->format('Y-m-d'); ?></td>
+                <td><?php echo $val->getFirstName(); ?></td>
+                <td><?php echo $val->getLastName(); ?></td>
+                <td><?php echo $val->getAge(); ?></td>
+                <td><?php echo $val->getDrivingExperienceYears() . ' m'; ?></td>
+                <td><?php echo $val->getGender()->getName() ?></td>
+                <td><?php echo $val->getTeam()->getName() ?></td>
                 <td>
                     <a href="#"
                        onclick="showConfirmDialog('<?php echo $module; ?>', '<?php echo $val->getId(); ?>')"
@@ -68,6 +70,6 @@ use Utils\Routing;
 
 <?php
 // įtraukiame puslapių šabloną
-require('paging.php');
-require('footer.php');
+require('view/paging.php');
+require('view/footer.php');
 
