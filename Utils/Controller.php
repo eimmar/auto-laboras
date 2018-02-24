@@ -2,23 +2,26 @@
 namespace Utils;
 
 
+use Controllers\BaseController;
+
 class Controller
 {
 
-  public function __construct() {
-    // Select and launch the correct Controller and action
-    $module = Routing::getModule();
-    $action = Routing::getAction();
+    public function __construct()
+    {
+        $module = Routing::getModule();
+        $action = Routing::getAction();
+        $controllerName = '\Controllers\\' . ucfirst($module) . 'Controller';
 
-    $controllerName = '\Controllers\\' . ucfirst($module) . 'Controller';
-    if (empty($action))
-      $action = $controllerName::$defaultAction;
+        /** @var BaseController $controller */
+        $controller = new $controllerName();
+        if (empty($action)) {
+            $action = $controller->getDefaultAction();
+        }
 
-    $actionName = $action . 'Action';
+        $actionName = $action . 'Action';
 
-    $controller = new $controllerName();
-    $controller->$actionName();
-  }
+        $controller->$actionName();
+    }
 
-};
-
+}

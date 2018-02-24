@@ -11,7 +11,7 @@ namespace Repository;
 
 use Model\Team;
 
-class TeamRepository extends EntityRepository
+class TeamRepository extends BaseRepository
 {
     protected function setUpFields(): void
     {

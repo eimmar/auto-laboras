@@ -9,7 +9,7 @@
 namespace Controllers;
 
 
-use Model\EntityRepository;
+use Repository\BaseRepository;
 use Utils\Paging;
 use Utils\Routing;
 use Utils\Template;
@@ -41,6 +41,21 @@ abstract class BaseController
      * @var string
      */
     protected $controllerPrefix;
+
+    /**
+     * @var BaseRepository
+     */
+    protected $repository;
+
+    public function __construct()
+    {
+        $namespace = explode('\\', get_class($this));
+        $this->setControllerPrefix(strtolower(str_replace('Controller', '', end($namespace))))
+            ->setDefaultAction('list');
+
+        $repositoryClass = '\Repository\\' . ucfirst($this->getControllerPrefix()) . 'Repository';
+        $this->repository = new $repositoryClass();
+    }
 
     /**
      * @return string
@@ -131,32 +146,19 @@ abstract class BaseController
     }
 
     /**
-     * @var EntityRepository
+     * @return mixed
      */
-    protected $baseEntity;
-
-    /**
-     * @return EntityRepository
-     */
-    public function getBaseEntity(): EntityRepository
+    public function getRepository(): BaseRepository
     {
-        return $this->baseEntity;
-    }
-
-    protected abstract function setUpBaseEntity();
-
-    public function __construct()
-    {
-        $this->setUpBaseEntity();
-        $this->setControllerPrefix(strtolower(str_replace('Controller', '', self::class)));
+        return $this->repository;
     }
 
     public function listAction()
     {
-        $elementCount = $this->getBaseEntity()->getListCount();
+        $elementCount = $this->getRepository()->getListCount();
         $paging = new Paging(NUMBER_OF_ROWS_IN_PAGE);
         $paging->process($elementCount, Routing::getPageId());
-        $data = $this->getBaseEntity()->getModels($paging->size, $paging->first);
+        $data = $this->getRepository()->getModels($paging->size, $paging->first);
 
         $template = Template::getInstance();
         $template->assign('data', $data);
@@ -176,10 +178,10 @@ abstract class BaseController
         $data = $this->validateInput();
 
         if ($data) {
-            $latestId = $this->getBaseEntity()->getMaxId();
+            $latestId = $this->getRepository()->getMaxId();
             $data['id'] = $latestId + 1;
 
-            $this->getBaseEntity()->insertEntity($data);
+            $this->getRepository()->insertEntity($data);
             Routing::redirect(Routing::getModule(), 'list');
         } else {
             $this->showForm();
@@ -189,7 +191,7 @@ abstract class BaseController
     public function editAction()
     {
         $id = Routing::getId();
-        $entity = $this->getBaseEntity()->getModel($id);
+        $entity = $this->getRepository()->getModel($id);
 
         if ($entity == false) {
             Routing::redirect(Routing::getModule(), 'list', 'id_error=1');
@@ -203,7 +205,7 @@ abstract class BaseController
 
         if ($data) {
             $data['id'] = $id;
-            $this->getBaseEntity()->updateEntity($data);
+            $this->getRepository()->updateEntity($data);
             Routing::redirect(Routing::getModule(), 'list');
         } else {
             $this->showForm();
@@ -215,6 +217,10 @@ abstract class BaseController
         $template = Template::getInstance();
         $template->assign('required', $this->required);
         $template->assign('maxLengths', $this->maxLengths);
+
+        $form = '\\Form\\' . ucfirst($this->getControllerPrefix()) . 'Form';
+        $model = '\\Model\\' . ucfirst($this->getControllerPrefix());
+        $template->assign('form', new $form(new $model()));
         $template->setView($this->getControllerPrefix() . '_form');
     }
 
@@ -243,7 +249,7 @@ abstract class BaseController
     public function deleteAction()
     {
         $id = Routing::getId();
-        $err = ($this->getBaseEntity()->deleteEntity($id)) ? '' : 'delete_error=1';
+        $err = ($this->getRepository()->deleteEntity($id)) ? '' : 'delete_error=1';
         Routing::redirect(Routing::getModule(), 'list', $err);
     }
 }

@@ -11,7 +11,7 @@ namespace Repository;
 
 use Model\Track;
 
-class TrackRepository extends EntityRepository
+class TrackRepository extends BaseRepository
 {
 
     protected function setUpFields(): void

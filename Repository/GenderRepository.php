@@ -9,10 +9,9 @@
 namespace Repository;
 
 
-use Enums\Gender;
-use Model\Entity;
+use Model\Gender;
 
-class GenderRepository extends EntityRepository
+class GenderRepository extends BaseRepository
 {
     protected function setUpFields(): void
     {
@@ -20,16 +19,6 @@ class GenderRepository extends EntityRepository
             'id',
             'name',
         ];
-    }
-
-    protected function hydrateObject(array $data, Entity $entity)
-    {
-        foreach ($data as $key => $value) {
-            $setter = 'set' . str_replace('_', '', ucfirst($key));
-            call_user_func_array([$entity, $setter], [$value]);
-        }
-
-        return $entity;
     }
 
     /**

@@ -13,8 +13,10 @@ use Model\Entity;
 use PDOException;
 use Utils\Mysql;
 
-abstract class EntityRepository
+abstract class BaseRepository
 {
+    const JOIN_DELIMITER = '___';
+
     /**
      * @var string
      */
@@ -23,23 +25,31 @@ abstract class EntityRepository
     /**
      * @var array
      */
-    protected $fields;
+    protected $fields = [];
 
-    protected $joinFields;
-
+    /**
+     * @var array
+     */
+    protected $joinFields = [];
 
     /**
      * @var Entity;
      */
     protected $entity;
 
-    /**
-     * @return string
-     */
-    public function getTableName(): string
+
+    public function __construct()
     {
-        return $this->tableName;
+        $namespace = explode('\\', get_class($this));
+        $entityName = str_replace('Repository', '', end($namespace));
+        $fullEntity = '\Model\\' . $entityName;
+        $this->entity = new $fullEntity();
+        $this->tableName = strtolower($entityName) . 's';
+
+        $this->setUpFields();
     }
+
+    protected abstract function setUpFields(): void;
 
     /**
      * @return array
@@ -57,12 +67,12 @@ abstract class EntityRepository
         return $this->joinFields;
     }
 
-    protected abstract function setUpFields(): void;
-
-
-    protected function setUpTableName(): void
+    /**
+     * @return Entity
+     */
+    protected function getEntity()
     {
-        $this->tableName = DB_PREFIX . '.' . strtolower(get_class($this->entity)) . 's';
+        return $this->entity;
     }
 
     /**
@@ -70,36 +80,100 @@ abstract class EntityRepository
      */
     protected function getModelSql()
     {
-        $model = strtolower(get_class($this->entity)) . 's';
-
         $selectCols = '';
         $joins = '';
 
         foreach ($this->getFields() as $field) {
-            $selectCols = $model . '.' . $field . ', ';
+            $selectCols .= $this->getTableName() . '.' . $field . ', ';
         }
 
         /**
          * @var string $field
-         * @var EntityRepository $repository
+         * @var BaseRepository $repository
          */
-        foreach ($this->getJoinFields() as $field => $repository) {
+        foreach ($this->getJoinFields() as $joinField => $repository) {
+
             foreach ($repository->getFields() as $field) {
-                $selectCols .= $repository->getTableName() . '.' . $field . ', ';
+                $selectCols .= $repository->getTableName() . '.' . $field . ' AS ' .
+                    self::JOIN_DELIMITER . $repository->getTableName() . self::JOIN_DELIMITER . $field . ', ';
             }
 
             $joins .= ' LEFT JOIN ' . $repository->getTableName() .
-                ' ON ' . $this->getTableName() . '.' . $field .' = ' . $repository->getTableName() . '.id ';
+                ' ON ' . $this->getTableName() . '.' . $joinField .' = ' . $repository->getTableName() . '.id ';
         }
 
-        return 'SELECT ' . trim($selectCols, ',') . ' FROM ' . $this->tableName . $joins;
+        return 'SELECT ' . trim($selectCols, ', ') . ' FROM ' . DB_NAME . '.' . $this->getTableName() . $joins . ' ';
     }
 
-    public function __construct($entity)
+    /**
+     * @param array $data
+     * @param mixed $entity
+     * @return mixed
+     */
+    protected function hydrateObject(array $data, Entity $entity)
     {
-        $this->setUpTableName();
-        $this->setUpFields();
-        $this->entity = $entity;
+        $joinedData = array_filter(
+            $data,
+            function ($key) {
+                return preg_match('@' . self::JOIN_DELIMITER . '@', $key);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+
+        $data = array_filter(
+            $data,
+            function ($key) {
+                return !preg_match('@' . self::JOIN_DELIMITER . '@', $key);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+
+        foreach ($data as $key => $value) {
+            $this->hydrateField($key, $value, $entity);
+        }
+
+        /**
+         * @var string $joinField
+         * @var BaseRepository $repository
+         */
+        foreach ($this->getJoinFields() as $joinField => $repository) {
+            $childEntity = clone $repository->getEntity();
+            $joinField = str_replace('_id', '', $joinField);
+
+            foreach ($joinedData as $key => $value) {
+                if (preg_match('@' . self::JOIN_DELIMITER . $joinField .'@', $key)) {
+
+                    $realKey = explode('___', $key);
+                    $realKey = end($realKey);
+                    $this->hydrateField($realKey, $value, $childEntity);
+                }
+            }
+
+            $this->hydrateField($joinField, $childEntity, $entity);
+        }
+
+
+        return $entity;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @param Entity $entity
+     */
+    private function hydrateField($key, $value, $entity)
+    {
+        $setter = 'set' . str_replace('_', '', ucfirst($key));
+        $value = preg_match('@date@', $key) ? new \DateTime($value) : $value;
+        call_user_func_array([$entity, $setter], [$value]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTableName(): string
+    {
+        return $this->tableName;
     }
 
     /**
@@ -108,11 +182,11 @@ abstract class EntityRepository
      */
     public function getModel(int $id)
     {
-        $query = $this->getModelSql();
+        $query = $this->getModelSql() . 'WHERE ' . $this->getTableName() . '.id = ?';
 
         $stmt = Mysql::getInstance()->prepare($query);
         $stmt->execute([$id]);
-        $data = $stmt->fetchAll();
+        $data = $stmt->fetch();
 
         if (count($data) == 0) {
             return false;
@@ -129,7 +203,7 @@ abstract class EntityRepository
      */
     public function getModels(int $limit = null, int $offset = null): array
     {
-        $query      = 'SELECT * FROM ' . $this->tableName;
+        $query      = $this->getModelSql();
         $parameters = [];
 
         if (isset($limit)) {
@@ -207,22 +281,6 @@ abstract class EntityRepository
         }
 
         return true;
-    }
-
-
-    /**
-     * @param array $data
-     * @param mixed $entity
-     * @return mixed
-     */
-    protected function hydrateObject(array $data, Entity $entity)
-    {
-        foreach ($data as $key => $value) {
-            $setter = 'set' . str_replace('_', '', ucfirst($key));
-            call_user_func_array([$entity, $setter], [$value]);
-        }
-
-        return $entity;
     }
 
 

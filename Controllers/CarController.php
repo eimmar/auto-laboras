@@ -1,8 +1,9 @@
 <?php
 namespace Controllers;
 
-use Model\CarRepository;
+use Model\Car;
 use Model\ModelRepository;
+use Repository\CarRepository;
 use Utils\Template;
 
 class CarController extends BaseController
@@ -81,11 +82,6 @@ class CarController extends BaseController
         $data['kondicionierius'] =  (!empty($data['kondicionierius']) && $data['kondicionierius'] == 'on') ? 1 : 0;
 
         return $data;
-    }
-
-    protected function setUpBaseEntity()
-    {
-        $this->baseEntity = new CarRepository();
     }
 };
 

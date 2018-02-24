@@ -2,7 +2,6 @@
 namespace Repository;
 
 use Model\Car;
-use PDOException;
 use Utils\Mysql;
 
 /**
@@ -11,7 +10,7 @@ use Utils\Mysql;
  * @author ISK
  */
 
-class CarRepository extends EntityRepository
+class CarRepository extends BaseRepository
 {
 
     protected function setUpFields(): void

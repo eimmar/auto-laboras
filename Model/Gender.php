@@ -1,7 +1,6 @@
 <?php
-namespace Enums;
+namespace Model;
 
-use Model\Entity;
 
 /**
  * Created by PhpStorm.

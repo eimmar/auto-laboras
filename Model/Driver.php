@@ -9,8 +9,6 @@
 namespace Model;
 
 
-use Enums\Gender;
-
 class Driver implements Entity
 {
     /**
@@ -36,7 +34,7 @@ class Driver implements Entity
     /**
      * @var int
      */
-    private $drivingExperianceYears;
+    private $drivingExperienceYears;
 
     /**
      * @var Team
@@ -123,18 +121,18 @@ class Driver implements Entity
     /**
      * @return int
      */
-    public function getDrivingExperianceYears(): int
+    public function getDrivingExperienceYears(): int
     {
-        return $this->drivingExperianceYears;
+        return $this->drivingExperienceYears;
     }
 
     /**
-     * @param int $drivingExperianceYears
+     * @param int $drivingExperienceYears
      * @return Driver
      */
-    public function setDrivingExperianceYears(int $drivingExperianceYears): Driver
+    public function setDrivingExperienceYears(int $drivingExperienceYears): Driver
     {
-        $this->drivingExperianceYears = $drivingExperianceYears;
+        $this->drivingExperienceYears = $drivingExperienceYears;
         return $this;
     }
 

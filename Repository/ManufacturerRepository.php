@@ -4,13 +4,14 @@ namespace Repository;
 use Model\Manufacturer;
 
 
-class ManufacturerRepository extends EntityRepository
+class ManufacturerRepository extends BaseRepository
 {
 
     protected function setUpFields(): void
     {
         $this->fields = [
             'id',
+            'name',
             'date_founded',
             'headquarters',
             'workers_count',

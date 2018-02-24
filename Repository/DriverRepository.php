@@ -8,13 +8,9 @@
 
 namespace Repository;
 
-
-use Enums\Gender;
 use Model\Driver;
-use Model\Entity;
-use Model\Team;
 
-class DriverRepository extends EntityRepository
+class DriverRepository extends BaseRepository
 {
     protected function setUpFields(): void
     {
@@ -27,48 +23,38 @@ class DriverRepository extends EntityRepository
         ];
 
         $this->joinFields = [
-            'team_id' => new TeamRepository(new Team()),
-            'gender' => new GenderRepository(new Gender()),
+            'team_id' => new TeamRepository(),
+            'gender' => new GenderRepository(),
         ];
     }
 
-    protected function getModelSql()
-    {
-        $model = strtolower(get_class($this->entity)) . 's';
-
-        $selectCols = '';
-        $joins = '';
-
-        foreach ($this->getFields() as $field) {
-            $selectCols = $model . '.' . $field . ', ';
-        }
-
-        /**
-         * @var string $field
-         * @var EntityRepository $repository
-         */
-        foreach ($this->getJoinFields() as $field => $repository) {
-            foreach ($repository->getFields() as $field) {
-                $selectCols .= $repository->getTableName() . '.' . $field . ', ';
-            }
-
-            $joins .= ' LEFT JOIN ' . $repository->getTableName() .
-                ' ON ' . $this->getTableName() . '.' . $field .' = ' . $repository->getTableName() . '.id ';
-        }
-
-        return 'SELECT ' . trim($selectCols, ',') . ' FROM ' . $this->tableName . $joins;
-
-    }
-
-    protected function hydrateObject(array $data, Entity $entity)
-    {
-        foreach ($data as $key => $value) {
-            $setter = 'set' . str_replace('_', '', ucfirst($key));
-            call_user_func_array([$entity, $setter], [$value]);
-        }
-
-        return $entity;
-    }
+//    protected function getModelSql()
+//    {
+//        $model = strtolower(get_class($this->entity)) . 's';
+//
+//        $selectCols = '';
+//        $joins = '';
+//
+//        foreach ($this->getFields() as $field) {
+//            $selectCols = $model . '.' . $field . ', ';
+//        }
+//
+//        /**
+//         * @var string $field
+//         * @var BaseRepository $repository
+//         */
+//        foreach ($this->getJoinFields() as $field => $repository) {
+//            foreach ($repository->getFields() as $field) {
+//                $selectCols .= $repository->getTableName() . '.' . $field . ', ';
+//            }
+//
+//            $joins .= ' LEFT JOIN ' . $repository->getTableName() .
+//                ' ON ' . $this->getTableName() . '.' . $field .' = ' . $repository->getTableName() . '.id ';
+//        }
+//
+//        return 'SELECT ' . trim($selectCols, ',') . ' FROM ' . $this->tableName . $joins;
+//
+//    }
 
     /**
      * @param int $id

@@ -72,4 +72,5 @@ function showConfirmDialog(module, deleteId) {
     if (r === true) {
         window.location.replace("index.php?module=" + module + "&action=delete&id=" + deleteId);
     }
+    return false;
 }
