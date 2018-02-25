@@ -231,6 +231,18 @@ abstract class BaseRepository
     }
 
     /**
+     * @param string $sql
+     * @param array $params
+     * @return array
+     */
+    public function executeRawSql(string $sql, array $params) : array
+    {
+        $stmt = Mysql::getInstance()->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
+    }
+
+    /**
      * Markių kiekio radimas
      * @return int
      */
@@ -254,7 +266,7 @@ abstract class BaseRepository
 
         foreach (array_keys($data) as $colName) {
             $cols .= $colName . ', ';
-            $vals .= sprintf(':%s , ', $colName);
+            $vals .= sprintf(':%s, ', $colName);
         }
 
         $query = sprintf(

@@ -11,6 +11,11 @@ namespace Form;
 
 class Field
 {
+    const TEXT_TYPE = 'text';
+    const CHECKBOX_TYPE = 'checkbox';
+    const SELECT_TYPE = 'select';
+    const RADIO_TYPE = 'radio';
+
     /**
      * @var string
      */
@@ -37,7 +42,12 @@ class Field
     private $isRequired;
 
     /**
-     * @var array|null
+     * @var bool
+     */
+    private $isForeignKey;
+
+    /**
+     * @var FieldOption[]|null
      */
     private $options;
 
@@ -63,8 +73,9 @@ class Field
 
     public function __construct()
     {
-        $this->isRequired = false;
-        $this->hasError = false;
+        $this->setIsRequired(false);
+        $this->setHasError(false);
+        $this->setIsForeignKey(false);
     }
 
     /**
@@ -160,6 +171,24 @@ class Field
     /**
      * @return bool
      */
+    public function isForeignKey(): bool
+    {
+        return $this->isForeignKey;
+    }
+
+    /**
+     * @param bool $isForeignKey
+     * @return Field
+     */
+    public function setIsForeignKey(bool $isForeignKey): Field
+    {
+        $this->isForeignKey = $isForeignKey;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
     public function hasError(): bool
     {
         return $this->hasError;
@@ -176,7 +205,7 @@ class Field
     }
 
     /**
-     * @return array|null
+     * @return FieldOption[]|null
      */
     public function getOptions(): ?array
     {
@@ -184,12 +213,24 @@ class Field
     }
 
     /**
-     * @param array|null $options
+     * @param FieldOption[]|null $options
      * @return Field
      */
     public function setOptions(?array $options): Field
     {
-        $this->options = $options;
+        foreach ($options as $option) {
+            $this->addOption(new FieldOption(current($option), end($option)));
+        }
+        return $this;
+    }
+
+    /**
+     * @param FieldOption $option
+     * @return Field
+     */
+    public function addOption(FieldOption $option): Field
+    {
+        $this->options[] = $option;
         return $this;
     }
 

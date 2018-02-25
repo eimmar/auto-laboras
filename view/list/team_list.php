@@ -31,6 +31,7 @@ use Utils\Routing;
             <th>ID</th>
             <th>Pavadinimas</th>
             <th>Metinis Biudzetas</th>
+            <th>Profesionali komanda</th>
             <th></th>
         </tr>
         <?php
@@ -44,6 +45,7 @@ use Utils\Routing;
                 <td><?php echo $val->getId(); ?></td>
                 <td><?php echo $val->getName(); ?></td>
                 <td><?php echo $val->getYearlyBudget() . ' EUR'; ?></td>
+                <td><?php echo $val->isProfessional() ? 'Taip' : 'Ne'; ?></td>
                 <td>
                     <a href="#"
                        onclick="showConfirmDialog('<?php echo $module; ?>', '<?php echo $val->getId(); ?>')"

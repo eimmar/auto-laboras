@@ -32,7 +32,7 @@ class Driver implements Entity
     private $age;
 
     /**
-     * @var int
+     * @var int|null
      */
     private $drivingExperienceYears;
 
@@ -119,18 +119,18 @@ class Driver implements Entity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getDrivingExperienceYears(): int
+    public function getDrivingExperienceYears(): ?int
     {
         return $this->drivingExperienceYears;
     }
 
     /**
-     * @param int $drivingExperienceYears
+     * @param int|null $drivingExperienceYears
      * @return Driver
      */
-    public function setDrivingExperienceYears(int $drivingExperienceYears): Driver
+    public function setDrivingExperienceYears(?int $drivingExperienceYears): Driver
     {
         $this->drivingExperienceYears = $drivingExperienceYears;
         return $this;

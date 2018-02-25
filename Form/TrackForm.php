@@ -2,23 +2,24 @@
 /**
  * Created by PhpStorm.
  * User: eimantas
- * Date: 18.2.24
- * Time: 02.14
+ * Date: 18.2.25
+ * Time: 11.13
  */
 
 namespace Form;
 
 
-class ManufacturerForm extends BaseForm
+class TrackForm extends BaseForm
 {
+
     /**
-     * @return BaseForm
+     * @return mixed
      * @throws \ReflectionException
      */
     public function buildForm()
     {
         return $this
-            ->setName('Gamintojas')
+            ->setName('Trasa')
             ->addField(
                 (new Field())
                     ->setType(Field::TEXT_TYPE)
@@ -31,38 +32,29 @@ class ManufacturerForm extends BaseForm
             ->addField(
                 (new Field())
                     ->setType(Field::TEXT_TYPE)
-                    ->setMaxLength(100)
-                    ->setName('headquarters')
-                    ->setLabel('Bustine')
-                    ->setValue($this->getFieldValue('headquarters'))
-                    ->setIsRequired(true)
-            )
-            ->addField(
-                (new Field())
-                    ->setType(Field::TEXT_TYPE)
                     ->setMaxLength(11)
-                    ->setName('workersCount')
-                    ->setLabel('Darbuotoju skaicius')
-                    ->setValue($this->getFieldValue('workersCount'))
+                    ->setName('distanceMeters')
+                    ->setLabel('Distancija (m)')
+                    ->setValue($this->getFieldValue('distanceMeters'))
                     ->setIsRequired(true)
                     ->setValidation('positivenumber')
             )
             ->addField(
                 (new Field())
                     ->setType(Field::TEXT_TYPE)
-                    ->setMaxLength(255)
-                    ->setName('founder')
-                    ->setLabel('Ikurejas')
-                    ->setValue($this->getFieldValue('founder'))
+                    ->setMaxLength(100)
+                    ->setName('location')
+                    ->setLabel('Vietove')
+                    ->setValue($this->getFieldValue('location'))
                     ->setIsRequired(true)
             )
             ->addField(
                 (new Field())
                     ->setType(Field::TEXT_TYPE)
                     ->setMaxLength(10)
-                    ->setName('dateFounded')
-                    ->setLabel('Ikurimo data')
-                    ->setValue($this->getFieldValue('dateFounded'))
+                    ->setName('openingDate')
+                    ->setLabel('Atidarymo data')
+                    ->setValue($this->getFieldValue('openingDate'))
                     ->setClass('date')
                     ->setIsRequired(true)
                     ->setValidation('date')

@@ -42,16 +42,6 @@ class Validator
     ];
 
     /**
-     * @var array
-     */
-    private $errors;
-
-//    /**
-//     * @var array
-//     */
-//    private $corrects;
-
-    /**
      * @var Field[]
      */
     private $fields;
@@ -69,7 +59,7 @@ class Validator
     	foreach ($this->fields as $field) {
 
             $result = $this->validateItem($field);
-			if ($result === true) {
+			if ($result === true && $field->getMaxLength()) {
                 if (strlen($field->getValue()) > $field->getMaxLength()) {
                     $result = false;
                 }
@@ -91,9 +81,9 @@ class Validator
 	 */
     public function validateItem($field)
     {
-        $value = $field->getValue();
+        $value = trim($field->getValue());
 
-        if (array_key_exists($field->getValidation(), $this->regexes)) {
+        if ($value && array_key_exists($field->getValidation(), $this->regexes)) {
             $return =  filter_var(
                 $value,
                 FILTER_VALIDATE_REGEXP,
@@ -106,7 +96,7 @@ class Validator
             return ($return);
         }
 
-        if ($field->isRequired() && strlen(trim($field->getValue())) === 0) {
+        if ($field->isRequired() && strlen($value) === 0) {
             return false;
         }
 
@@ -145,7 +135,14 @@ class Validator
 
 		foreach ($this->fields as $field) {
 			$key = preg_replace('@([A-Z])@', '_$1', $field->getName());
-			$data[strtolower($key)] = htmlentities($field->getValue());
+			$key = $field->isForeignKey() ? $key . '_id' : $key;
+
+			if ($field->getType() === Field::CHECKBOX_TYPE) {
+			    $field->setValue($field->getValue() === 'on' ? 1 : 0);
+            }
+            $value = strlen($field->getValue()) ? htmlentities($field->getValue()) : null;
+
+			$data[strtolower($key)] = $value;
 		}
 
 		return $data;

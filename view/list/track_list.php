@@ -45,8 +45,8 @@ use Utils\Routing;
             <tr>
                 <td><?php echo $val->getId(); ?></td>
                 <td><?php echo $val->getName(); ?></td>
-                <td><?php echo $val->getDistanceMeters(); ?></td>
-                <td><?php echo $val->getLocation() . ' m'; ?></td>
+                <td><?php echo $val->getDistanceMeters() . ' m'; ?></td>
+                <td><?php echo $val->getLocation(); ?></td>
                 <td><?php echo $val->getOpeningDate()->format('Y-m-d'); ?></td>
                 <td>
                     <a href="#"

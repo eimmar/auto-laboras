@@ -8,6 +8,7 @@
 namespace Form;
 
 
+use Model\Entity;
 use ReflectionClass;
 use ReflectionProperty;
 use Utils\Validator;
@@ -42,7 +43,7 @@ abstract class BaseForm
     /**
      * @var array
      */
-    private $rawFields;
+    private $rawData;
 
     /**
      * @var Validator
@@ -51,12 +52,10 @@ abstract class BaseForm
 
 
     /**
-     * @param mixed $entity
-     * @param bool $isEdit
      * @return mixed
      * @throws \ReflectionException
      */
-    public abstract function buildForm($entity, bool $isEdit);
+    public abstract function buildForm();
 
     /**
      * BaseForm constructor.
@@ -68,7 +67,7 @@ abstract class BaseForm
     {
         $this->setName('Forma');
         $this->setFormData($entity);
-        $this->buildForm($entity, $isEdit);
+        $this->buildForm();
         $this->isSubmitted = isset($_POST['submit']) ? true : false;
         $this->isValid = true;
     }
@@ -100,16 +99,6 @@ abstract class BaseForm
     }
 
     /**
-     * @param Validator $validator
-     * @return BaseForm
-     */
-    public function setValidator(Validator $validator): BaseForm
-    {
-        $this->validator = $validator;
-        return $this;
-    }
-
-    /**
      * @return bool
      */
     public function isValid(): bool
@@ -128,9 +117,9 @@ abstract class BaseForm
     /**
      * @return array
      */
-    public function getRawFields(): array
+    public function getRawData(): array
     {
-        return $this->rawFields;
+        return $this->rawData;
     }
 
     /**
@@ -144,7 +133,8 @@ abstract class BaseForm
 
         array_walk($fields, function (ReflectionProperty $field) use ($entity) {
             $field->setAccessible(true);
-            $this->formData[$field->getName()] = $field->getValue($entity);
+            $value = $field->getValue($entity);
+            $this->formData[$field->getName()] = $value instanceof Entity ? (int) $value->getId() : $value;
         });
     }
 
@@ -164,7 +154,7 @@ abstract class BaseForm
                 $this->isValid = false;
             } else {
                 $this->isValid = true;
-                $this->rawFields = $this->validator->preparePostFieldsForSQL();
+                $this->rawData = $this->validator->preparePostFieldsForSQL();
             }
 
         }

@@ -32,7 +32,7 @@ use Utils\Routing;
             <th>Vardas</th>
             <th>Pavarde</th>
             <th>Amzius</th>
-            <th>Vairavimo stazas</th>
+            <th>Vairavimo stazas (m)</th>
             <th>Lytis</th>
             <th>Komanda</th>
             <th></th>
@@ -49,7 +49,7 @@ use Utils\Routing;
                 <td><?php echo $val->getFirstName(); ?></td>
                 <td><?php echo $val->getLastName(); ?></td>
                 <td><?php echo $val->getAge(); ?></td>
-                <td><?php echo $val->getDrivingExperienceYears() . ' m'; ?></td>
+                <td><?php echo $val->getDrivingExperienceYears() ?: 'N/A'; ?></td>
                 <td><?php echo $val->getGender()->getName() ?></td>
                 <td><?php echo $val->getTeam()->getName() ?></td>
                 <td>

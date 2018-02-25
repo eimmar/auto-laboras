@@ -127,7 +127,7 @@ abstract class BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->getRepository()->insertEntity($form->getRawFields());
+            $this->getRepository()->insertEntity($form->getRawData());
             Routing::redirect(Routing::getModule(), 'list');
         } else {
             $template
@@ -147,7 +147,7 @@ abstract class BaseController
 
         $form = $this->getForm($entity, true)->validate();
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getRepository()->updateEntity($entity->getId(), $form->getRawFields());
+            $this->getRepository()->updateEntity($entity->getId(), $form->getRawData());
             Routing::redirect(Routing::getModule(), 'list');
         } else {
             $template
