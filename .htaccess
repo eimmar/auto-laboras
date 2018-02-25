@@ -6,12 +6,7 @@
 
 # Prevent site configuration and htaccess files from being accessed
 # directly from browser even PHP engine is stopped
-<Files ~ "config.php|.htaccess">
+<Files ~ "config.php|.htaccess|.gitignore|README.md">
     Order Deny,Allow 
     Deny from all
 </Files>
-
-# Išjungiam išvesties bufferizavimą,
-# kuris kartais paslepia errorus,
-# išspausdintus prieš peradresavimą
-#php_flag "output_buffering" off
