@@ -27,7 +27,7 @@ class DriverForm extends BaseForm
             ->setName('Vairuotojas')
             ->addField(
                 (new Field())
-                    ->setType(Field::TEXT_TYPE)
+                    ->setType(BaseForm::TEXT_TYPE)
                     ->setMaxLength(100)
                     ->setName('firstName')
                     ->setLabel('Vardas')
@@ -36,7 +36,7 @@ class DriverForm extends BaseForm
             )
             ->addField(
                 (new Field())
-                    ->setType(Field::TEXT_TYPE)
+                    ->setType(BaseForm::TEXT_TYPE)
                     ->setMaxLength(100)
                     ->setName('lastName')
                     ->setLabel('Pavarde')
@@ -45,7 +45,7 @@ class DriverForm extends BaseForm
             )
             ->addField(
                 (new Field())
-                    ->setType(Field::TEXT_TYPE)
+                    ->setType(BaseForm::TEXT_TYPE)
                     ->setMaxLength(3)
                     ->setName('age')
                     ->setLabel('Amzius')
@@ -55,7 +55,7 @@ class DriverForm extends BaseForm
             )
             ->addField(
                 (new Field())
-                    ->setType(Field::TEXT_TYPE)
+                    ->setType(BaseForm::TEXT_TYPE)
                     ->setMaxLength(3)
                     ->setName('drivingExperienceYears')
                     ->setLabel('Vairavimo stazas (m)')
@@ -64,24 +64,22 @@ class DriverForm extends BaseForm
             )
             ->addField(
                 (new Field())
-                    ->setType(Field::SELECT_TYPE)
+                    ->setType(BaseForm::SELECT_TYPE)
                     ->setName('team')
                     ->setLabel('Komanda')
                     ->setValue($this->getFieldValue('team'))
-                    ->setOptions(
-                        $teamRepository->executeRawSql('SELECT id, name FROM ' . $teamRepository->getTableName(), [])
-                    )->setIsForeignKey(true)
+                    ->setOptions($teamRepository->getOptionsList())
+                    ->setIsForeignKey(true)
                     ->setIsRequired(true)
             )
             ->addField(
                 (new Field())
-                    ->setType(Field::RADIO_TYPE)
+                    ->setType(BaseForm::RADIO_TYPE)
                     ->setName('gender')
                     ->setLabel('Lytis')
                     ->setValue($this->getFieldValue('gender'))
-                    ->setOptions(
-                        $genderRepository->executeRawSql('SELECT id, name FROM ' . $genderRepository->getTableName(), [])
-                    )->setIsRequired(true)
+                    ->setOptions($genderRepository->getOptionsList())
+                    ->setIsRequired(true)
             );
     }
 }

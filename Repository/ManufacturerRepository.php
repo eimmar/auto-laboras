@@ -37,5 +37,4 @@ class ManufacturerRepository extends BaseRepository
     {
         return parent::getModels($limit, $offset);
     }
-
 }

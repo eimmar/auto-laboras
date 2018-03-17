@@ -21,7 +21,7 @@ class ManufacturerForm extends BaseForm
             ->setName('Gamintojas')
             ->addField(
                 (new Field())
-                    ->setType(Field::TEXT_TYPE)
+                    ->setType(BaseForm::TEXT_TYPE)
                     ->setMaxLength(100)
                     ->setName('name')
                     ->setLabel('Pavadinimas')
@@ -30,7 +30,7 @@ class ManufacturerForm extends BaseForm
             )
             ->addField(
                 (new Field())
-                    ->setType(Field::TEXT_TYPE)
+                    ->setType(BaseForm::TEXT_TYPE)
                     ->setMaxLength(100)
                     ->setName('headquarters')
                     ->setLabel('Bustine')
@@ -39,7 +39,7 @@ class ManufacturerForm extends BaseForm
             )
             ->addField(
                 (new Field())
-                    ->setType(Field::TEXT_TYPE)
+                    ->setType(BaseForm::TEXT_TYPE)
                     ->setMaxLength(11)
                     ->setName('workersCount')
                     ->setLabel('Darbuotoju skaicius')
@@ -49,7 +49,7 @@ class ManufacturerForm extends BaseForm
             )
             ->addField(
                 (new Field())
-                    ->setType(Field::TEXT_TYPE)
+                    ->setType(BaseForm::TEXT_TYPE)
                     ->setMaxLength(255)
                     ->setName('founder')
                     ->setLabel('Ikurejas')
@@ -58,7 +58,7 @@ class ManufacturerForm extends BaseForm
             )
             ->addField(
                 (new Field())
-                    ->setType(Field::TEXT_TYPE)
+                    ->setType(BaseForm::TEXT_TYPE)
                     ->setMaxLength(10)
                     ->setName('dateFounded')
                     ->setLabel('Ikurimo data')

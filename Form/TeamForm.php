@@ -22,7 +22,7 @@ class TeamForm extends BaseForm
             ->setName('Komanda')
             ->addField(
                 (new Field())
-                    ->setType(Field::TEXT_TYPE)
+                    ->setType(BaseForm::TEXT_TYPE)
                     ->setMaxLength(100)
                     ->setName('name')
                     ->setLabel('Pavadinimas')
@@ -31,7 +31,7 @@ class TeamForm extends BaseForm
             )
             ->addField(
                 (new Field())
-                    ->setType(Field::TEXT_TYPE)
+                    ->setType(BaseForm::TEXT_TYPE)
                     ->setMaxLength(11)
                     ->setName('yearlyBudget')
                     ->setLabel('Metinis biudzetas EUR')
@@ -41,7 +41,7 @@ class TeamForm extends BaseForm
             )
             ->addField(
                 (new Field())
-                    ->setType(Field::CHECKBOX_TYPE)
+                    ->setType(BaseForm::CHECKBOX_TYPE)
                     ->setName('isProfessional')
                     ->setLabel('Profesionali komanda')
                     ->setValue($this->getFieldValue('isProfessional'))

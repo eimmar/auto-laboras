@@ -22,7 +22,7 @@ class TrackForm extends BaseForm
             ->setName('Trasa')
             ->addField(
                 (new Field())
-                    ->setType(Field::TEXT_TYPE)
+                    ->setType(BaseForm::TEXT_TYPE)
                     ->setMaxLength(100)
                     ->setName('name')
                     ->setLabel('Pavadinimas')
@@ -31,7 +31,7 @@ class TrackForm extends BaseForm
             )
             ->addField(
                 (new Field())
-                    ->setType(Field::TEXT_TYPE)
+                    ->setType(BaseForm::TEXT_TYPE)
                     ->setMaxLength(11)
                     ->setName('distanceMeters')
                     ->setLabel('Distancija (m)')
@@ -41,7 +41,7 @@ class TrackForm extends BaseForm
             )
             ->addField(
                 (new Field())
-                    ->setType(Field::TEXT_TYPE)
+                    ->setType(BaseForm::TEXT_TYPE)
                     ->setMaxLength(100)
                     ->setName('location')
                     ->setLabel('Vietove')
@@ -50,7 +50,7 @@ class TrackForm extends BaseForm
             )
             ->addField(
                 (new Field())
-                    ->setType(Field::TEXT_TYPE)
+                    ->setType(BaseForm::TEXT_TYPE)
                     ->setMaxLength(10)
                     ->setName('openingDate')
                     ->setLabel('Atidarymo data')

@@ -19,7 +19,7 @@ class Car implements Entity
     /**
      * @var \DateTime
      */
-    private $date_manufactured;
+    private $dateManufactured;
 
     /**
      * @var int
@@ -47,27 +47,27 @@ class Car implements Entity
     private $topSpeedKph;
 
     /**
-     * @var int
+     * @var DriveWheels
      */
     private $driveWheels;
 
     /**
-     * @var int
+     * @var BodyType
      */
     private $bodyType;
 
     /**
-     * @var int
+     * @var Engine
      */
     private $engine;
 
     /**
-     * @var int
+     * @var Model
      */
     private $model;
 
     /**
-     * @var int
+     * @var Gearbox
      */
     private $gearbox;
 
@@ -94,7 +94,7 @@ class Car implements Entity
      */
     public function getDateManufactured(): \DateTime
     {
-        return $this->date_manufactured;
+        return $this->dateManufactured;
     }
 
     /**
@@ -103,7 +103,7 @@ class Car implements Entity
      */
     public function setDateManufactured(\DateTime $date_manufactured): Car
     {
-        $this->date_manufactured = $date_manufactured;
+        $this->dateManufactured = $date_manufactured;
         return $this;
     }
 

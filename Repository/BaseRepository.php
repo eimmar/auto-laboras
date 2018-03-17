@@ -231,6 +231,14 @@ abstract class BaseRepository
     }
 
     /**
+     * @return array
+     */
+    public function getOptionsList()
+    {
+        return $this->executeRawSql('SELECT id, name FROM ' . $this->getTableName(), []);
+    }
+
+    /**
      * @param string $sql
      * @param array $params
      * @return array

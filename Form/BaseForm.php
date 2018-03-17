@@ -15,6 +15,11 @@ use Utils\Validator;
 
 abstract class BaseForm
 {
+    const TEXT_TYPE = 'text';
+    const CHECKBOX_TYPE = 'checkbox';
+    const SELECT_TYPE = 'select';
+    const RADIO_TYPE = 'radio';
+
     /**
      * @var Field[]|null
      */
