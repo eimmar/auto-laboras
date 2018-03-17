@@ -9,7 +9,7 @@
 namespace Repository;
 
 
-class TiresRepository extends BaseRepository
+class TireRepository extends BaseRepository
 {
     public function setUpFields(): void
     {
@@ -33,8 +33,8 @@ class TiresRepository extends BaseRepository
     public function getOptionsList()
     {
         return $this->executeRawSql(
-            'SELECT t.id, concat(m.name, t.width, t.aspect_ratio) AS name ' .
-            'FROM ' . $this->getTableName() . ' t' .
+            'SELECT t.id, concat(m.name, " ", t.width, "/", t.aspect_ratio) AS name ' .
+            'FROM ' . $this->getTableName() . ' t ' .
             'LEFT JOIN manufacturers m ON t.manufacturer_id = m.id',
             []
         );

@@ -11,7 +11,6 @@
        id="<?php echo $field->getName(); ?>"
        name="<?php echo $field->getName(); ?>"
        class="textbox-150 <?php echo $field->getClass(); ?>"
-       value="<?php echo $field->getValue(); ?>"
      <?php echo $field->getValue() ? 'checked' : ''; ?>
 
 />

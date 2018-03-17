@@ -26,6 +26,21 @@ use Utils\Routing;
 
 
                 <?php foreach ($form->getFields() as $field) : ?>
+                    <?php if ($field->getType() !== \Form\BaseForm::FORM_TYPE) : ?>
+                        <p>
+                            <?php require(sprintf('view/form/field/%s.php', $field->getType())); ?>
+
+                            <?php if ($field->getMaxLength()) : ?>
+                                <span class='max-len'>(iki <?php echo $field->getMaxLength(); ?> simb.)</span>
+                            <?php endif; ?>
+                        </p>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
+            </fieldset>
+
+            <?php foreach ($form->getFields() as $field) : ?>
+                <?php if ($field->getType() === \Form\BaseForm::FORM_TYPE) : ?>
                     <p>
                         <?php require(sprintf('view/form/field/%s.php', $field->getType())); ?>
 
@@ -33,9 +48,9 @@ use Utils\Routing;
                             <span class='max-len'>(iki <?php echo $field->getMaxLength(); ?> simb.)</span>
                         <?php endif; ?>
                     </p>
-                <?php endforeach; ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
 
-            </fieldset>
             <p class="required-note">* pažymėtus laukus užpildyti privaloma</p>
             <p>
                 <input type="submit" class="submit" name="submit" value="Išsaugoti">

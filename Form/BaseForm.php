@@ -19,6 +19,7 @@ abstract class BaseForm
     const CHECKBOX_TYPE = 'checkbox';
     const SELECT_TYPE = 'select';
     const RADIO_TYPE = 'radio';
+    const FORM_TYPE = 'form';
 
     /**
      * @var Field[]|null
@@ -39,6 +40,11 @@ abstract class BaseForm
      * @var bool
      */
     private $isValid;
+
+    /**
+     * @var bool
+     */
+    protected $isEdit;
 
     /**
      * @var bool
@@ -72,6 +78,7 @@ abstract class BaseForm
     {
         $this->setName('Forma');
         $this->setFormData($entity);
+        $this->setIsEdit($isEdit);
         $this->buildForm();
         $this->isSubmitted = isset($_POST['submit']) ? true : false;
         $this->isValid = true;
@@ -109,6 +116,24 @@ abstract class BaseForm
     public function isValid(): bool
     {
         return $this->isValid;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEdit(): bool
+    {
+        return $this->isEdit;
+    }
+
+    /**
+     * @param bool $isEdit
+     * @return BaseForm
+     */
+    public function setIsEdit(bool $isEdit): BaseForm
+    {
+        $this->isEdit = $isEdit;
+        return $this;
     }
 
     /**

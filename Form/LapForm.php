@@ -11,9 +11,9 @@ namespace Form;
 
 use Repository\CarRepository;
 use Repository\DriverRepository;
-use Repository\TiresRepository;
+use Repository\TireRepository;
 use Repository\TrackRepository;
-use Repository\WeatherConditionsRepository;
+use Repository\WeatherConditionRepository;
 
 class LapForm extends BaseForm
 {
@@ -24,11 +24,10 @@ class LapForm extends BaseForm
      */
     public function buildForm()
     {
-        $weatherRepository = new WeatherConditionsRepository();
+        $weatherRepository = new WeatherConditionRepository();
         $carRepository = new CarRepository();
         $driverRepository = new DriverRepository();
-        $tiresRepository = new TiresRepository();
-        $trackRepository = new TrackRepository();
+        $tiresRepository = new TireRepository();
 
         return $this
             ->setName('Trasa')
@@ -84,23 +83,12 @@ class LapForm extends BaseForm
             ->addField(
                 (new Field())
                     ->setType(BaseForm::SELECT_TYPE)
-                    ->setName('tires')
+                    ->setName('tire')
                     ->setLabel('Padangos')
-                    ->setValue($this->getFieldValue('tires'))
+                    ->setValue($this->getFieldValue('tire'))
                     ->setOptions($tiresRepository->getOptionsList())
                     ->setIsForeignKey(true)
                     ->setIsRequired(true)
-            )
-//            ->addField(
-//                (new Field())
-//                    ->setType(BaseForm::SELECT_TYPE)
-//                    ->setName('track')
-//                    ->setLabel('Trasa')
-//                    ->setValue($this->getFieldValue('track'))
-//                    ->setOptions($trackRepository->getOptionsList())
-//                    ->setIsForeignKey(true)
-//                    ->setIsRequired(true)
-//            )
-            ;
+            );
     }
 }

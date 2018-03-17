@@ -22,10 +22,10 @@ class LapRepository extends BaseRepository
         ];
 
         $this->joinFields = [
-            'weather_conditions' => new WeatherConditionsRepository(),
+            'weather_conditions' => new WeatherConditionRepository(),
             'car_id' => new CarRepository(),
             'driver_id' => new DriverRepository(),
-            'tires_id' => new TiresRepository(),
+            'tires_id' => new TireRepository(),
             'track_id' => new TrackRepository()
         ];
     }

@@ -137,7 +137,7 @@ class Validator
 			$key = preg_replace('@([A-Z])@', '_$1', $field->getName());
 			$key = $field->isForeignKey() ? $key . '_id' : $key;
 
-			if ($field->getType() === Field::CHECKBOX_TYPE) {
+			if ($field->getType() === BaseForm::CHECKBOX_TYPE) {
 			    $field->setValue($field->getValue() === 'on' ? 1 : 0);
             }
             $value = strlen($field->getValue()) ? htmlentities($field->getValue()) : null;

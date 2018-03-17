@@ -44,7 +44,7 @@ abstract class BaseRepository
         $entityName = str_replace('Repository', '', end($namespace));
         $fullEntity = '\Model\\' . $entityName;
         $this->entity = new $fullEntity();
-        $this->tableName = strtolower($entityName) . 's';
+        $this->tableName = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $entityName)) . 's';
 
         $this->setUpFields();
     }

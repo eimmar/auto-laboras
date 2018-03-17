@@ -57,6 +57,11 @@ class Field
     private $hasError;
 
     /**
+     * @var BaseForm|null
+     */
+    private $formType;
+
+    /**
      * @var string|null
      */
     private $validation;
@@ -280,6 +285,24 @@ class Field
     public function setMaxLength(?int $maxLength): Field
     {
         $this->maxLength = $maxLength;
+        return $this;
+    }
+
+    /**
+     * @return BaseForm|null
+     */
+    public function getFormType(): ?BaseForm
+    {
+        return $this->formType;
+    }
+
+    /**
+     * @param BaseForm|null $formType
+     * @return Field
+     */
+    public function setFormType(?BaseForm $formType): Field
+    {
+        $this->formType = $formType;
         return $this;
     }
 }

@@ -37,8 +37,8 @@ class CarRepository extends BaseRepository
     public function getOptionsList()
     {
         return $this->executeRawSql(
-            'SELECT c.id, concat(mn.name, m.name, m.generation, c.id) AS name ' .
-            'FROM ' . $this->getTableName() . ' c' .
+            'SELECT c.id, concat(mn.name, " ", m.name, " ", m.generation, " id: " ,c.id) AS name ' .
+            'FROM ' . $this->getTableName() . ' AS c ' .
             'LEFT JOIN models m ON c.model_id = m.id ' .
             'LEFT JOIN manufacturers mn ON m.manufacturer_id = mn.id',
             []

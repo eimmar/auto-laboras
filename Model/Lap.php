@@ -32,7 +32,7 @@ class Lap implements Entity
     private $note;
 
     /**
-     * @var WeatherConditions
+     * @var WeatherCondition
      */
     private $weatherConditions;
 
@@ -47,7 +47,7 @@ class Lap implements Entity
     private $driver;
 
     /**
-     * @var Tires
+     * @var Tire
      */
     private $tires;
 
@@ -129,18 +129,18 @@ class Lap implements Entity
     }
 
     /**
-     * @return WeatherConditions
+     * @return WeatherCondition
      */
-    public function getWeatherConditions(): WeatherConditions
+    public function getWeatherConditions(): WeatherCondition
     {
         return $this->weatherConditions;
     }
 
     /**
-     * @param WeatherConditions $weatherConditions
+     * @param WeatherCondition $weatherConditions
      * @return Lap
      */
-    public function setWeatherConditions(WeatherConditions $weatherConditions): Lap
+    public function setWeatherConditions(WeatherCondition $weatherConditions): Lap
     {
         $this->weatherConditions = $weatherConditions;
         return $this;
@@ -183,18 +183,18 @@ class Lap implements Entity
     }
 
     /**
-     * @return Tires
+     * @return Tire
      */
-    public function getTires(): Tires
+    public function getTires(): Tire
     {
         return $this->tires;
     }
 
     /**
-     * @param Tires $tires
+     * @param Tire $tires
      * @return Lap
      */
-    public function setTires(Tires $tires): Lap
+    public function setTires(Tire $tires): Lap
     {
         $this->tires = $tires;
         return $this;

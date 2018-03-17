@@ -9,6 +9,8 @@
 namespace Form;
 
 
+use Model\Lap;
+
 class TrackForm extends BaseForm
 {
 
@@ -18,7 +20,7 @@ class TrackForm extends BaseForm
      */
     public function buildForm()
     {
-        return $this
+        $this
             ->setName('Trasa')
             ->addField(
                 (new Field())
@@ -59,5 +61,20 @@ class TrackForm extends BaseForm
                     ->setIsRequired(true)
                     ->setValidation('date')
             );
+
+        if (!$this->isEdit()) {
+            $this->addField(
+                (new Field())
+                    ->setType(BaseForm::FORM_TYPE)
+                    ->setFormType(new LapForm(new Lap(), $this->isEdit()))
+                    ->setName('lap')
+                    ->setLabel('Apvaziavimo laikas')
+                    ->setValue($this->getFieldValue('lap'))
+                    ->setIsForeignKey(true)
+                    ->setIsRequired(true)
+            );
+        }
+
+        return $this;
     }
 }

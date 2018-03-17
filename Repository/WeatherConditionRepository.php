@@ -9,7 +9,7 @@
 namespace Repository;
 
 
-class WeatherConditionsRepository extends BaseRepository
+class WeatherConditionRepository extends BaseRepository
 {
 
     protected function setUpFields(): void

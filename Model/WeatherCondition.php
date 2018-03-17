@@ -9,6 +9,6 @@
 namespace Model;
 
 
-class WeatherConditions extends CommonEntity implements Entity
+class WeatherCondition extends CommonEntity implements Entity
 {
 }

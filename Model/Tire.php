@@ -9,7 +9,7 @@
 namespace Model;
 
 
-class Tires implements Entity
+class Tire implements Entity
 {
     /**
      * @var int
@@ -56,9 +56,9 @@ class Tires implements Entity
 
     /**
      * @param int $id
-     * @return Tires
+     * @return Tire
      */
-    public function setId(int $id): Tires
+    public function setId(int $id): Tire
     {
         $this->id = $id;
         return $this;
@@ -74,9 +74,9 @@ class Tires implements Entity
 
     /**
      * @param int $width
-     * @return Tires
+     * @return Tire
      */
-    public function setWidth(int $width): Tires
+    public function setWidth(int $width): Tire
     {
         $this->width = $width;
         return $this;
@@ -92,9 +92,9 @@ class Tires implements Entity
 
     /**
      * @param int $aspectRatio
-     * @return Tires
+     * @return Tire
      */
-    public function setAspectRatio(int $aspectRatio): Tires
+    public function setAspectRatio(int $aspectRatio): Tire
     {
         $this->aspectRatio = $aspectRatio;
         return $this;
@@ -110,9 +110,9 @@ class Tires implements Entity
 
     /**
      * @param \DateTime $dateManufactured
-     * @return Tires
+     * @return Tire
      */
-    public function setDateManufactured(\DateTime $dateManufactured): Tires
+    public function setDateManufactured(\DateTime $dateManufactured): Tire
     {
         $this->dateManufactured = $dateManufactured;
         return $this;
@@ -128,9 +128,9 @@ class Tires implements Entity
 
     /**
      * @param SpeedIndex $speedIndex
-     * @return Tires
+     * @return Tire
      */
-    public function setSpeedIndex(SpeedIndex $speedIndex): Tires
+    public function setSpeedIndex(SpeedIndex $speedIndex): Tire
     {
         $this->speedIndex = $speedIndex;
         return $this;
@@ -146,9 +146,9 @@ class Tires implements Entity
 
     /**
      * @param RimSize $rimSize
-     * @return Tires
+     * @return Tire
      */
-    public function setRimSize(RimSize $rimSize): Tires
+    public function setRimSize(RimSize $rimSize): Tire
     {
         $this->rimSize = $rimSize;
         return $this;
@@ -164,9 +164,9 @@ class Tires implements Entity
 
     /**
      * @param Manufacturer $manufacturer
-     * @return Tires
+     * @return Tire
      */
-    public function setManufacturer(Manufacturer $manufacturer): Tires
+    public function setManufacturer(Manufacturer $manufacturer): Tire
     {
         $this->manufacturer = $manufacturer;
         return $this;

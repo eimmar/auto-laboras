@@ -46,4 +46,13 @@ class DriverRepository extends BaseRepository
     {
         return parent::getModels($limit, $offset);
     }
+
+    public function getOptionsList()
+    {
+        return $this->executeRawSql(
+            'SELECT id, concat(first_name, " ", last_name) AS name ' .
+            'FROM ' . $this->getTableName(),
+            []
+        );
+    }
 }

@@ -1,10 +1,10 @@
-$(window).ready(function (){
+$(document).ready(function (){
     
     $(".addChild").click(function() {
         // pagrindinis vaikinių įrašų konteineris
-        childRowContainer = $(this).parent().prev(".childRowContainer");
+        childRowContainer = $(this).parent().parent().find(".childRowContainer");
         
-        if(childRowContainer.children(".childRow:last").hasClass("hidden")) { // jeigu nėra nei vienos eilutės
+        if (childRowContainer.children(".childRow:last").hasClass("hidden")) { // jeigu nėra nei vienos eilutės
             // pašaliname paslėptos eilutės požymius
             childRowContainer.children(".childRow:last, .labelLeft, .labelRight").removeClass("hidden");
             childRowContainer.children(".childRow:last").children("input[type=text], select").prop("disabled", false);
