@@ -42,6 +42,14 @@ class Validator
     ];
 
     /**
+     * @var array
+     */
+    private $fieldRenameMap = [
+        'tire_id'               => 'tires_id',
+        'weather_conditions_id' => 'weather_conditions'
+    ];
+
+    /**
      * @var Field[]
      */
     private $fields;
@@ -69,6 +77,16 @@ class Validator
 				$haveFailures = true;
 				$field->setHasError(true);
 			}
+
+			if ($field->getType() === BaseForm::FORM_TYPE && $field->getValue()) {
+			    /** @var BaseForm $fieldForm */
+                foreach ($field->getValue() as $fieldForm) {
+			        if (!$fieldForm->isValid()) {
+                        $haveFailures = true;
+                        break;
+                    }
+                }
+            }
     	}
 
     	return (!$haveFailures);
@@ -81,6 +99,10 @@ class Validator
 	 */
     public function validateItem($field)
     {
+        if (is_array($field->getValue())) {
+            return true;
+        }
+
         $value = trim($field->getValue());
 
         if ($value && array_key_exists($field->getValidation(), $this->regexes)) {
@@ -134,8 +156,16 @@ class Validator
 		$data = [];
 
 		foreach ($this->fields as $field) {
-			$key = preg_replace('@([A-Z])@', '_$1', $field->getName());
+		    if ($field->getType() === BaseForm::FORM_TYPE) {
+		        continue;
+            }
+
+			$key = strtolower(preg_replace('@([A-Z])@', '_$1', $field->getName()));
 			$key = $field->isForeignKey() ? $key . '_id' : $key;
+
+            if (array_key_exists($key, $this->fieldRenameMap)) {
+                $key = $this->fieldRenameMap[$key];
+            }
 
 			if ($field->getType() === BaseForm::CHECKBOX_TYPE) {
 			    $field->setValue($field->getValue() === 'on' ? 1 : 0);

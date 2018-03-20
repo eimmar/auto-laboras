@@ -386,6 +386,10 @@ fieldset .submit {
     margin-left: 20px;
 }
 
+.has-error {
+    border-color: #a94442;
+}
+
 .warningBox {
     background-color: #FEEFB3;
     text-align: left;

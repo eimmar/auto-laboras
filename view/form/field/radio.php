@@ -12,6 +12,7 @@
            name="<?php echo $field->getName(); ?>"
            id="<?php echo $field->getName()?>"
            value="<?php echo $option->getValue()?>"
+           class="<?php if ($field->hasError()) :?> has-error <?php endif; ?>"
         <?php echo ($option->getValue() == $field->getValue()) ? 'checked' : ''; ?>
     >
     <?php echo $option->getLabel(); ?><br/>

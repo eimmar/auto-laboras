@@ -121,7 +121,7 @@ abstract class BaseController
     public function createAction()
     {
         $entity = $this->getRepository()->createEntity();
-        $form = $this->getForm($entity, false)->validate();
+        $form = $this->getForm($entity, false)->validate($_POST);
         $template = Template::getInstance();
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -144,7 +144,7 @@ abstract class BaseController
             Routing::redirect(Routing::getModule(), 'list', 'id_error=1');
         }
 
-        $form = $this->getForm($entity, true)->validate();
+        $form = $this->getForm($entity, true)->validate($_POST);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getRepository()->updateEntity($entity->getId(), $form->getRawData());
             Routing::redirect(Routing::getModule(), 'list');

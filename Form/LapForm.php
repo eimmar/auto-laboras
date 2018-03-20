@@ -44,7 +44,7 @@ class LapForm extends BaseForm
             ->addField(
                 (new Field())
                     ->setType(BaseForm::TEXT_TYPE)
-                    ->setMaxLength(11)
+                    ->setMaxLength(150)
                     ->setName('note')
                     ->setLabel('Papildoma informacija')
                     ->setValue($this->getFieldValue('note'))
@@ -79,6 +79,17 @@ class LapForm extends BaseForm
                     ->setOptions($driverRepository->getOptionsList())
                     ->setIsForeignKey(true)
                     ->setIsRequired(true)
+            )
+            ->addField(
+                (new Field())
+                    ->setType(BaseForm::TEXT_TYPE)
+                    ->setMaxLength(10)
+                    ->setName('dateLapped')
+                    ->setLabel('Vaziavimo data')
+                    ->setValue($this->getFieldValue('dateLapped'))
+                    ->setClass('date')
+                    ->setIsRequired(true)
+                    ->setValidation('date')
             )
             ->addField(
                 (new Field())

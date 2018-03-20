@@ -16,7 +16,7 @@ use Utils\Routing;
 
 <?php if (!empty($delete_error)) : ?>
     <div class="errorBox">
-        Si trasa negali buti pasalintas.
+        Si trasa negali buti pasalinta.
     </div>
 <?php endif; ?>
 

@@ -9,6 +9,7 @@
 namespace Repository;
 
 
+use Form\BaseForm;
 use Model\Entity;
 use PDOException;
 use Utils\Mysql;
@@ -294,6 +295,57 @@ abstract class BaseRepository
     }
 
     /**
+     * @param BaseForm $form
+     * @return bool
+     */
+    public function insertAllRelatedEntities($form)
+    {
+        $childEntityData = [];
+        foreach ($form->getFields() as $field) {
+            if ($field->getFormType()) {
+                foreach ($field->getValue() as $value)
+                $childEntityData[$field->getName()][] = $value->getRawData();
+            }
+        }
+
+        if (($result = $this->insertEntity($form->getRawData()))) {
+            $sql = '';
+            $params = [];
+            $parentId = Mysql::getInstance()->lastInsertId();
+            $parent = explode('\\', get_class($form));
+            $parent = end($parent);
+            $parent = strtolower(str_replace('Form', '', $parent)) . '_id';
+
+            foreach ($childEntityData as $table => $values) {
+
+                $colNames = implode(', ', array_keys($values[0])) . ', ' . $parent;
+                $sql = sprintf('INSERT INTO %ss (%s) VALUES ', $table, $colNames);
+                foreach ($values as $index => $value) {
+                    $row = [];
+                    $params[$parent . $index] = $parentId;
+                    foreach (array_keys($value) as $key) {
+                        $row[$key . $index] = $value[$key];
+                        $params[$key . $index] = $value[$key];
+                    }
+                    $row[$parent . $index] = $parentId;
+
+                    $sql .= sprintf('(%s), ', ':' . implode(', :', array_keys($row)));
+                }
+            }
+
+            $stmt = Mysql::getInstance()->prepare(trim($sql, ', '));
+            foreach ($params as $key => $value) {
+                $stmt->bindValue($key, $value);
+            }
+
+            $result = $stmt->execute();
+        }
+
+
+        return $result;
+    }
+
+    /**
      * @param array $data
      * @return Entity
      */
@@ -317,14 +369,13 @@ abstract class BaseRepository
     public function updateEntity($id, $data) : bool
     {
         $query = sprintf('UPDATE %s SET ', $this->tableName);
-        foreach (array_keys($data) as $colName) {
 
+        foreach (array_keys($data) as $colName) {
             $query .= sprintf(' %s = :%s , ', $colName, $colName);
         }
+
         $query = trim($query, ', ') . ' WHERE id = :id';
-
         $data['id'] = $id;
-
         $stmt = Mysql::getInstance()->prepare($query);
         try {
             $stmt->execute($data);

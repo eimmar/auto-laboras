@@ -9,7 +9,7 @@
 
 <select name="<?php echo $field->getName(); ?>"
         id="<?php echo $field->getName(); ?>"
-        class="<?php echo $field->getClass(); ?>">
+        class="<?php echo $field->getClass(); ?><?php if ($field->hasError()) :?> has-error <?php endif; ?>">
     <option value="">Pasirinkite</option>
 
         <?php foreach ($field->getOptions() as $option) : ?>

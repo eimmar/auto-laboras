@@ -9,8 +9,6 @@
 namespace Repository;
 
 
-use Model\Track;
-
 class TrackRepository extends BaseRepository
 {
 
@@ -23,24 +21,5 @@ class TrackRepository extends BaseRepository
             'location',
             'opening_date',
         ];
-    }
-
-    /**
-     * @param int $id
-     * @return Track|bool
-     */
-    public function getModel($id)
-    {
-        return parent::getModel($id);
-    }
-
-    /**
-     * @param int|null $limit
-     * @param int|null $offset
-     * @return Track[]
-     */
-    public function getModels(int $limit = null, int $offset = null): array
-    {
-        return parent::getModels($limit, $offset);
     }
 }

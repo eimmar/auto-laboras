@@ -84,6 +84,16 @@ abstract class BaseForm
         $this->isValid = true;
     }
 
+    public function __clone()
+    {
+        $clonedFields = [];
+
+        foreach ($this->getFields() as $field) {
+            $clonedFields[$field->getName()] = clone $field;
+        }
+        $this->setFields($clonedFields);
+    }
+
     /**
      * @return string
      */
@@ -145,9 +155,9 @@ abstract class BaseForm
     }
 
     /**
-     * @return array
+     * @return array|null
      */
-    public function getRawData(): array
+    public function getRawData(): ?array
     {
         return $this->rawData;
     }
@@ -169,27 +179,70 @@ abstract class BaseForm
     }
 
     /**
+     * @param array $formData
      * @return BaseForm
      */
-    public function validate() : BaseForm
+    public function validate($formData) : BaseForm
     {
         if ($this->isSubmitted()) {
             $this->validator = new Validator();
-            foreach ($_POST as $key => $value) {
-                $this->setFieldValue($key, $value);
+            foreach ($formData as $key => $value) {
+
+                if (is_array($value)) {
+                    $this->validateEmbeddedForm($key, $value);
+                } else {
+                    $this->setFieldValue($key, $value);
+                }
             }
 
             if (!$this->validator->validate($this)) {
-
                 $this->isValid = false;
             } else {
                 $this->isValid = true;
                 $this->rawData = $this->validator->preparePostFieldsForSQL();
             }
-
         }
 
         return $this;
+    }
+
+    /**
+     * @param string $key
+     * @param array $value
+     */
+    private function validateEmbeddedForm($key, $value)
+    {
+        foreach ($this->getFields() as $field) {
+            if ($field->getName() === $key) {
+                $formData = $this->formatEmbeddedFormData($value);
+                $fieldValue = [];
+
+                foreach ($formData as $data) {
+                    $form = clone $field->getFormType();
+                    $fieldValue[] = $form->validate($data);
+                }
+                $field->setValue($fieldValue);
+            }
+        }
+    }
+
+    /**
+     * @param array $postData
+     * @return array
+     */
+    private function formatEmbeddedFormData($postData)
+    {
+        $count = count(current($postData)) - 1;
+        $i = 0;
+        $formData = [];
+
+        while ($i <= $count) {
+            foreach ($postData as $key => $data) {
+                $formData[$i][$key] = $data[$i];
+            }
+            $i++;
+        }
+        return $formData;
     }
 
     /**
