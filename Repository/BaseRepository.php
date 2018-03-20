@@ -302,13 +302,14 @@ abstract class BaseRepository
     {
         $childEntityData = [];
         foreach ($form->getFields() as $field) {
-            if ($field->getFormType()) {
-                foreach ($field->getValue() as $value)
-                $childEntityData[$field->getName()][] = $value->getRawData();
+            if ($field->getFormType() && $field->getValue()) {
+                foreach ($field->getValue() as $value) {
+                    $childEntityData[$field->getName()][] = $value->getRawData();
+                }
             }
         }
 
-        if (($result = $this->insertEntity($form->getRawData()))) {
+        if (($result = $this->insertEntity($form->getRawData())) && count($childEntityData)) {
             $sql = '';
             $params = [];
             $parentId = Mysql::getInstance()->lastInsertId();

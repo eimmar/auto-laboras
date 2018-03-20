@@ -215,17 +215,39 @@ abstract class BaseForm
         foreach ($this->getFields() as $field) {
             if ($field->getName() === $key) {
                 $formData = $this->formatEmbeddedFormData($value);
-                $fieldValue = [];
 
-                foreach ($formData as $data) {
-                    $form = clone $field->getFormType();
-                    $fieldValue[] = $form->validate($data);
+                if ($this->isEmbeddedFormBeingUsed($formData)) {
+                    $fieldValue = [];
+
+                    foreach ($formData as $data) {
+                        $form = clone $field->getFormType();
+                        $fieldValue[] = $form->validate($data);
+                    }
+                    $field->setValue($fieldValue);
                 }
-                $field->setValue($fieldValue);
             }
         }
     }
 
+    /**
+     * @param array $formData
+     * @return bool
+     */
+    private function isEmbeddedFormBeingUsed($formData)
+    {
+        $used = true;
+        if ($formData && count($formData) === 1) {
+            $used = false;
+            foreach ($formData[0] as $field) {
+                if ($field) {
+                    $used = true;
+                    break;
+                }
+            }
+        }
+
+        return $used;
+    }
     /**
      * @param array $postData
      * @return array

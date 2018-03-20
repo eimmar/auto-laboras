@@ -55,6 +55,25 @@ class Validator
     private $fields;
 
     /**
+     * @param BaseForm[] $forms
+     * @return bool
+     */
+    private function isEmbeddedFormBeingUsed($forms)
+    {
+        $used = false;
+        if ($forms && count($forms) === 1) {
+            foreach ($forms[0]->getFields() as $field) {
+                if ($field->getValue()) {
+                    $used = true;
+                    break;
+                }
+            }
+        }
+
+        return $used;
+    }
+
+    /**
 	 * Patikrinamas reikšių masyvas
      * @param BaseForm $form
 	 * @return bool
@@ -81,7 +100,7 @@ class Validator
 			if ($field->getType() === BaseForm::FORM_TYPE && $field->getValue()) {
 			    /** @var BaseForm $fieldForm */
                 foreach ($field->getValue() as $fieldForm) {
-			        if (!$fieldForm->isValid()) {
+			        if (!$fieldForm->isValid() && $this->isEmbeddedFormBeingUsed($field->getValue())) {
                         $haveFailures = true;
                         break;
                     }
@@ -99,7 +118,7 @@ class Validator
 	 */
     public function validateItem($field)
     {
-        if (is_array($field->getValue())) {
+        if (is_array($field->getValue()) || $field->getType() === BaseForm::FORM_TYPE) {
             return true;
         }
 
