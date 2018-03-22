@@ -28,25 +28,6 @@ class DriverRepository extends BaseRepository
         ];
     }
 
-    /**
-     * @param int $id
-     * @return Driver|bool
-     */
-    public function getModel($id)
-    {
-        return parent::getModel($id);
-    }
-
-    /**
-     * @param int|null $limit
-     * @param int|null $offset
-     * @return Driver[]
-     */
-    public function getModels(int $limit = null, int $offset = null): array
-    {
-        return parent::getModels($limit, $offset);
-    }
-
     public function getOptionsList()
     {
         return $this->executeRawSql(
@@ -54,5 +35,23 @@ class DriverRepository extends BaseRepository
             'FROM ' . $this->getTableName(),
             []
         );
+    }
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function deleteEntity($id): bool
+    {
+//        $query = 'DELETE FROM laps WHERE labs.driver_id = ?';
+//        $stmt = Mysql::getInstance()->prepare($query);
+//
+//        try {
+//            $stmt->execute([$id]);
+//        } catch (PDOException $e) {
+//            return false;
+//        }
+
+        return parent::deleteEntity($id);
     }
 }

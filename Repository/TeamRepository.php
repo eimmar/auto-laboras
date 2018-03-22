@@ -9,8 +9,6 @@
 namespace Repository;
 
 
-use Model\Team;
-
 class TeamRepository extends BaseRepository
 {
     protected function setUpFields(): void
@@ -25,20 +23,19 @@ class TeamRepository extends BaseRepository
 
     /**
      * @param int $id
-     * @return Team|bool
+     * @return bool
      */
-    public function getModel($id)
+    public function deleteEntity($id): bool
     {
-        return parent::getModel($id);
-    }
+//        $query = 'DELETE drivers, laps FROM drivers LEFT JOIN laps ON laps.driver_id = drivers.id WHERE drivers.team_id = ?';
+//        $stmt = Mysql::getInstance()->prepare($query);
+//
+//        try {
+//            $stmt->execute([$id]);
+//        } catch (PDOException $e) {
+//            return false;
+//        }
 
-    /**
-     * @param int|null $limit
-     * @param int|null $offset
-     * @return Team[]
-     */
-    public function getModels(int $limit = null, int $offset = null): array
-    {
-        return parent::getModels($limit, $offset);
+        return parent::deleteEntity($id);
     }
 }

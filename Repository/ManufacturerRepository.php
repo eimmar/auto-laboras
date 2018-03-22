@@ -1,7 +1,6 @@
 <?php
 namespace Repository;
 
-use Model\Manufacturer;
 
 
 class ManufacturerRepository extends BaseRepository
@@ -21,20 +20,24 @@ class ManufacturerRepository extends BaseRepository
 
     /**
      * @param int $id
-     * @return Manufacturer|bool
+     * @return bool
      */
-    public function getModel($id)
+    public function deleteEntity($id): bool
     {
-        return parent::getModel($id);
-    }
+//        $query = 'DELETE engines, gearboxes, models, tires FROM engines ' .
+//        'LEFT JOIN gearboxes ON gearboxes.manufacturer_id = engines.manufacturer_id ' .
+//        'LEFT JOIN models ON models.manufacturer_id = engines.manufacturer_id ' .
+//        'LEFT JOIN tires ON tires.manufacturer_id = engines.manufacturer_id ' .
+//        'WHERE engines.manufacturer_id = ?';
 
-    /**
-     * @param int|null $limit
-     * @param int|null $offset
-     * @return Manufacturer[]
-     */
-    public function getModels(int $limit = null, int $offset = null): array
-    {
-        return parent::getModels($limit, $offset);
+//        $stmt = Mysql::getInstance()->prepare($query);
+//
+//        try {
+//            $stmt->execute([$id]);
+//        } catch (PDOException $e) {
+//            return false;
+//        }
+
+        return parent::deleteEntity($id);
     }
 }

@@ -2,7 +2,6 @@
 namespace Repository;
 use Model\Car;
 use PDO;
-use PDOException;
 use Utils\Mysql;
 
 

@@ -22,4 +22,22 @@ class TrackRepository extends BaseRepository
             'opening_date',
         ];
     }
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function deleteEntity($id): bool
+    {
+//        $query = 'DELETE FROM laps WHERE labs.track_id = ?';
+//        $stmt = Mysql::getInstance()->prepare($query);
+//
+//        try {
+//            $stmt->execute([$id]);
+//        } catch (PDOException $e) {
+//            return false;
+//        }
+
+        return parent::deleteEntity($id);
+    }
 }
