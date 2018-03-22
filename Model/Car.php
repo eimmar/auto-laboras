@@ -98,12 +98,12 @@ class Car implements Entity
     }
 
     /**
-     * @param \DateTime $date_manufactured
+     * @param \DateTime $dateManufactured
      * @return Car
      */
-    public function setDateManufactured(\DateTime $date_manufactured): Car
+    public function setDateManufactured(\DateTime $dateManufactured): Car
     {
-        $this->dateManufactured = $date_manufactured;
+        $this->dateManufactured = $dateManufactured;
         return $this;
     }
 
@@ -198,90 +198,90 @@ class Car implements Entity
     }
 
     /**
-     * @return int
+     * @return DriveWheels
      */
-    public function getDriveWheels(): int
+    public function getDriveWheels(): DriveWheels
     {
         return $this->driveWheels;
     }
 
     /**
-     * @param int $driveWheels
+     * @param DriveWheels $driveWheels
      * @return Car
      */
-    public function setDriveWheels(int $driveWheels): Car
+    public function setDriveWheels(DriveWheels $driveWheels): Car
     {
         $this->driveWheels = $driveWheels;
         return $this;
     }
 
     /**
-     * @return int
+     * @return BodyType
      */
-    public function getBodyType(): int
+    public function getBodyType(): BodyType
     {
         return $this->bodyType;
     }
 
     /**
-     * @param int $bodyType
+     * @param BodyType $bodyType
      * @return Car
      */
-    public function setBodyType(int $bodyType): Car
+    public function setBodyType(BodyType $bodyType): Car
     {
         $this->bodyType = $bodyType;
         return $this;
     }
 
     /**
-     * @return int
+     * @return Engine
      */
-    public function getEngine(): int
+    public function getEngine(): Engine
     {
         return $this->engine;
     }
 
     /**
-     * @param int $engine
+     * @param Engine $engine
      * @return Car
      */
-    public function setEngine(int $engine): Car
+    public function setEngine(Engine $engine): Car
     {
         $this->engine = $engine;
         return $this;
     }
 
     /**
-     * @return int
+     * @return Model
      */
-    public function getModel(): int
+    public function getModel(): Model
     {
         return $this->model;
     }
 
     /**
-     * @param int $model
+     * @param Model $model
      * @return Car
      */
-    public function setModel(int $model): Car
+    public function setModel(Model $model): Car
     {
         $this->model = $model;
         return $this;
     }
 
     /**
-     * @return int
+     * @return Gearbox
      */
-    public function getGearbox(): int
+    public function getGearbox(): Gearbox
     {
         return $this->gearbox;
     }
 
     /**
-     * @param int $gearbox
+     * @param Gearbox $gearbox
      * @return Car
      */
-    public function setGearbox(int $gearbox): Car
+    public function setGearbox(Gearbox $gearbox): Car
     {
         $this->gearbox = $gearbox;
         return $this;

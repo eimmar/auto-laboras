@@ -2,14 +2,14 @@
 /**
  * Created by PhpStorm.
  * User: eimantas
- * Date: 18.3.17
- * Time: 18.16
+ * Date: 18.3.22
+ * Time: 16.24
  */
 
 namespace Repository;
 
 
-class DriveWheelsRepository extends BaseRepository
+class GearboxTypeRepository extends BaseRepository
 {
 
     protected function setUpFields(): void
@@ -18,7 +18,5 @@ class DriveWheelsRepository extends BaseRepository
             'id',
             'name'
         ];
-
-        $this->tableName = 'drive_wheels';
     }
 }

@@ -316,4 +316,16 @@ abstract class BaseForm
         $this->fields[$field->getName()] = $field;
         return $this;
     }
+
+    /**
+     * @param string $key
+     * @return BaseForm
+     */
+    public function removeField($key)
+    {
+        if (array_key_exists($key, $this->fields)) {
+            unset($this->fields[$key]);
+        }
+        return $this;
+    }
 }

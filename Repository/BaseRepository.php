@@ -79,7 +79,7 @@ abstract class BaseRepository
     /**
      * @return string
      */
-    protected function getModelSql()
+    protected function getModelSql(bool $rawSql = false)
     {
         $selectCols = '';
         $joins = '';
@@ -147,6 +147,7 @@ abstract class BaseRepository
                     $realKey = explode('___', $key);
                     $realKey = end($realKey);
                     $this->hydrateField($realKey, $value, $childEntity);
+                    unset($joinedData[$key]);
                 }
             }
 

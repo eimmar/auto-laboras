@@ -7,8 +7,6 @@ $menuLeft = [
     'team' => 'Komandos',
     'driver' => 'Vairuotojai',
     'car' => 'Automobiliai',
-//    'brand' => 'Markės',
-//    'Model' => 'Modeliai'
 ];
 $menuRight = [
     'report' => 'Ataskaitos'

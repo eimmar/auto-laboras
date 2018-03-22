@@ -22,7 +22,7 @@ use Utils\Routing;
         <?php require('view/formErrors.php'); ?>
         <form action="" method="post">
             <fieldset>
-                <legend>Informacija</legend>
+                <legend><?php echo $form->getName(); ?></legend>
 
 
                 <?php foreach ($form->getFields() as $field) : ?>

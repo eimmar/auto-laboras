@@ -259,12 +259,12 @@ h2#pageTitle {
     display: block;
     margin-bottom: 10px;
     margin-right: 8px;
-    float: left;
 }
 
 #contentMain .childRowContainer a {
     margin-top: 2px;
-    float: left;
+    position: relative;
+    left: 400px;
 }
 
 #contentMain p#newItemButtonContainer {

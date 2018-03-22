@@ -46,7 +46,9 @@ class Validator
      */
     private $fieldRenameMap = [
         'tire_id'               => 'tires_id',
-        'weather_conditions_id' => 'weather_conditions'
+        'weather_conditions_id' => 'weather_conditions',
+        'drive_wheels_id'       => 'drive_wheels',
+        'body_type_id'          => 'body_type'
     ];
 
     /**
@@ -68,6 +70,8 @@ class Validator
                     break;
                 }
             }
+        } elseif (count($forms) > 1) {
+            $used = true;
         }
 
         return $used;

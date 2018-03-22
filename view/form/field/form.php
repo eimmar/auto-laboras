@@ -10,7 +10,7 @@
 ?>
 
 <fieldset class="embed-form">
-    <legend><?php echo $formField->getFormType()->getName(); ?></legend>
+    <legend><?php echo $formField->getLabel(); ?></legend>
 
     <div class="childRowContainer">
         <?php if ($formField->getValue()) : ?>
