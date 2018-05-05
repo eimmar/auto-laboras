@@ -9,6 +9,9 @@
 namespace Repository;
 
 
+use PDOException;
+use Utils\Mysql;
+
 class TeamRepository extends BaseRepository
 {
     protected function setUpFields(): void
@@ -37,5 +40,26 @@ class TeamRepository extends BaseRepository
 //        }
 
         return parent::deleteEntity($id);
+    }
+
+    /**
+     * @param array $criteria
+     * @return array|bool
+     */
+    public function getReportData($criteria)
+    {
+        $query = 'SELECT tracks.*, COUNT(laps.id) as lapCount, AVG(laps.lap_time_ms) as avgTime FROM tracks, laps ';
+        $query .= 'WHERE laps.date_lapped >= :date_from AND laps.date_lapped <= :date_to AND tracks.id = laps.track_id ';
+        $query .= 'GROUP BY tracks.id ORDER BY lapCount DESC';
+
+        $stmt = Mysql::getInstance()->prepare($query);
+
+        try {
+            $stmt->execute($criteria);
+        } catch (PDOException $e) {
+            return false;
+        }
+
+        return $stmt->fetchAll();
     }
 }

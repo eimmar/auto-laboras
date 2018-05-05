@@ -27,9 +27,9 @@ class ReportController extends BaseController
                 "reportName" => "TracksReport"
             ],
             2 => [
-                "title" => "Vėluojamų grąžinti automobilių ataskaita",
-                "description" => "Negrąžintų arba pavėluotai grąžintų automobilių ataskaita.",
-                "reportName" => "DelayedCarsReport"
+                "title" => "Komandų ir vairuotojų pravažiuotų ratų ataskaita",
+                "description" => "Per laikotarpį komandų ir vairuotojų pravažiuotų ratų trasose ataskaita.",
+                "reportName" => "TeamsReport"
             ]
         ];
     }

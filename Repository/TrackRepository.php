@@ -44,7 +44,10 @@ class TrackRepository extends BaseRepository
         return parent::deleteEntity($id);
     }
 
-
+    /**
+     * @param array $criteria
+     * @return array|bool
+     */
     public function getReportData($criteria)
     {
         $query = 'SELECT tracks.*, COUNT(laps.id) as lapCount, AVG(laps.lap_time_ms) as avgTime FROM tracks, laps ';

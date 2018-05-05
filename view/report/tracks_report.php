@@ -7,7 +7,7 @@ use Utils\Routing;
   <ul id="reportInfo">
     <li class="title">Trasose pravažiuotų ratų ataskaita</li>
     <li>Sudarymo data: <span><?php echo date("Y-m-d"); ?></span></li>
-    <li>Ratų sudarymo laikotarpis:
+    <li>Ratų važiavimo laikotarpis:
 	    <span>
         <?php
         if(!empty($data['date_from'])) {
