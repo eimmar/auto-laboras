@@ -21,7 +21,7 @@ class DelayedCarsReport {
     );
 
     public function showForm() {
-        Template::getInstance()->setView("delayed_cars_report_form");
+        Template::getInstance()->setView("report/delayed_cars_report_form");
     }
 
     /**
@@ -43,7 +43,7 @@ class DelayedCarsReport {
             $template->assign("delayedCarsData", $delayedCarsData);
             $template->assign("data", $data);
 
-            $template->setView("delayed_cars_report");
+            $template->setView("report/delayed_cars_report");
         } else {
 
             $this->showForm();

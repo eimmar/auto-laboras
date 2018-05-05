@@ -22,7 +22,7 @@ class ServiceReport
     );
 
     public function showForm() {
-        Template::getInstance()->setView("service_report_form");
+        Template::getInstance()->setView("report/service_report_form");
     }
 
     public function showResult() {
@@ -43,7 +43,7 @@ class ServiceReport
             $template->assign("servicesStats", $servicesStats);
             $template->assign("data", $data);
 
-            $template->setView("service_report");
+            $template->setView("report/service_report");
         } else {
 
             $this->showForm();

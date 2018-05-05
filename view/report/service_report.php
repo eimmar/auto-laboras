@@ -1,11 +1,11 @@
 <?php
-require('header_report.php');
+require(dirname(__FILE__) . '/../header_report.php');
 use Utils\Routing;
 ?>
 
 <div id="header">
   <ul id="reportInfo">
-    <li class="title">Vėluojamų grąžinti automobilių ataskaita</li>
+    <li class="title">Užsakytų paslaugų ataskaita</li>
     <li>Sudarymo data: <span><?php echo date("Y-m-d"); ?></span></li>
     <li>Paslaugų užsakymo laikotarpis:
 	    <span>
@@ -33,28 +33,39 @@ use Utils\Routing;
 <div id="content">
   <div id="contentMain">
   <?php
-  if(sizeof($delayedCarsData) > 0) { ?>
+  if(sizeof($servicesData) > 0) { ?>
     <table class="reportTable">
       <tr>
-        <th>Sutartis</th>
-        <th>Klientas</th>
-        <th>Planuota grąžinti</th>
-        <th style="border-right: 1px solid #6e6e6e;">Grąžinta</th>
+			  <th>ID</th>
+			  <th>Paslauga</th>
+			  <th>Užsakyta kartų</th>
+			  <th style="border-right: 1px solid #6e6e6e;">Užsakyta už</th>
       </tr>
 
       <tr><td class="separator" colspan="5"></td></tr>
       <?php
       // suformuojame lentelę
-      foreach($delayedCarsData as $key => $val) {
+      foreach($servicesData as $key => $val) {
         echo
           "<tr>",
-          "<td>#{$val['nr']}, {$val['sutarties_data']}</td>",
-          "<td>{$val['vardas']} {$val['pavarde']}</td>",
-          "<td>{$val['planuojama_grazinimo_data_laikas']}</td>",
-          "<td>{$val['grazinta']}</td>",
-          "</tr>\n";
-      } ?>
+          "<td>{$val['id']}</td>",
+          "<td>{$val['pavadinimas']}</td>",
+          "<td>{$val['uzsakyta']}</td>",
+          "<td>{$val['bendra_suma']} &euro;</td>",
+          "</tr>";
+      }
+      ?>
 
+      <tr class="aggregate">
+        <td></td>
+        <td class="label">Suma:</td>
+        <td class="border">
+          <?php echo "{$servicesStats[0]['uzsakyta']}"; ?>
+        </td>
+        <td class="border">
+          <?php echo "{$servicesStats[0]['bendra_suma']}"; ?> &euro;
+        </td>
+      </tr>
     </table>
   <?php } else { ?>
     <div class="warningBox">
@@ -64,5 +75,4 @@ use Utils\Routing;
   </div>
 </div>
 
-<?php require('footer_report.php');
-
+<?php require(dirname(__FILE__) . '/../footer_report.php');

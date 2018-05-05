@@ -1,9 +1,9 @@
-<?php require('header_report.php'); ?>
+<?php require(dirname(__FILE__) . '/../header_report.php'); ?>
 
 <div id="content">
 	<div id="contentMain">
 			<div id="formContainer">
-        <?php require("formErrors.php"); ?>
+        <?php require(dirname(__FILE__) . '/../formErrors.php'); ?>
 				<form action="" method="post">
 					<fieldset>
 						<legend>Įveskite ataskaitos kriterijus</legend>
@@ -16,5 +16,4 @@
 	</div>
 </div>
 
-<?php require('footer_report.php');
-
+<?php require(dirname(__FILE__) . '/../footer_report.php');
