@@ -22,9 +22,9 @@ class ReportController extends BaseController
 
         $this->reports = [
             1 => [
-                "title" => "Užsakytų paslaugų ataskaita",
-                "description" => "Per laikotarpį užsakytų papildomų paslaugų ataskaita.",
-                "reportName" => "ServiceReport"
+                "title" => "Trasose pravažiuotų ratų ataskaita",
+                "description" => "Per laikotarpį pravažiuotų ratų trasose ataskaita.",
+                "reportName" => "TracksReport"
             ],
             2 => [
                 "title" => "Vėluojamų grąžinti automobilių ataskaita",
@@ -48,11 +48,8 @@ class ReportController extends BaseController
             $report = '\Report\\' . $this->reports[$id]["reportName"];
 
             $rC = new $report();
-            if (!empty($_POST['submit'])) {
-                $rC->showResult();
-            } else {
-                $rC->showForm();
-            }
+            $rC->showResult();
+
         } else {
 
             die("Report {$id} not found!");

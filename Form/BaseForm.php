@@ -77,7 +77,8 @@ abstract class BaseForm
     public function __construct($entity, bool $isEdit)
     {
         $this->setName('Forma');
-        $this->setFormData($entity);
+        $this->formData = [];
+        !$entity ?: $this->setFormData($entity);
         $this->setIsEdit($isEdit);
         $this->buildForm();
         $this->isSubmitted = isset($_POST['submit']) ? true : false;
