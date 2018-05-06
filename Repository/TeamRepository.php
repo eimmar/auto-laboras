@@ -9,6 +9,7 @@
 namespace Repository;
 
 
+use PDO;
 use PDOException;
 use Utils\Mysql;
 
@@ -48,9 +49,12 @@ class TeamRepository extends BaseRepository
      */
     public function getReportData($criteria)
     {
-        $query = 'SELECT tracks.*, COUNT(laps.id) as lapCount, AVG(laps.lap_time_ms) as avgTime FROM tracks, laps ';
-        $query .= 'WHERE laps.date_lapped >= :date_from AND laps.date_lapped <= :date_to AND tracks.id = laps.track_id ';
-        $query .= 'GROUP BY tracks.id ORDER BY lapCount DESC';
+        $query = 'SELECT teams.name, teams.yearly_budget, teams.is_professional, drivers.first_name, drivers.last_name, ';
+        $query .= 'AVG(laps.lap_time_ms) as avgTime, COUNT(laps.id) as lapCount, GROUP_CONCAT(DISTINCT(tracks.name)) as trackNames, AVG(tracks.distance_meters) as avgDistance ';
+        $query .= 'FROM teams, drivers, tracks, laps ';
+        $query .= 'WHERE drivers.team_id = teams.id AND laps.driver_id = drivers.id AND laps.track_id = tracks.id ';
+        $query .= 'AND laps.date_lapped >= :date_from AND laps.date_lapped <= :date_to ';
+        $query .= 'GROUP BY teams.id, drivers.id ORDER BY teams.name, avgTime ASC';
 
         $stmt = Mysql::getInstance()->prepare($query);
 
@@ -60,6 +64,6 @@ class TeamRepository extends BaseRepository
             return false;
         }
 
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_GROUP);
     }
 }

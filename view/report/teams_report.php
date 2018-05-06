@@ -33,37 +33,73 @@ use Utils\Routing;
     <div id="content">
         <div id="contentMain">
             <?php
-            if(sizeof($reportData) > 0) { ?>
+            if (sizeof($reportData) > 0) { ?>
                 <table class="reportTable">
-                    <tr>
-                        <th>Trasos pavadinimas</th>
-                        <th>Distancija</th>
-                        <th>Vietovė</th>
-                        <th style="border-right: 1px solid #6e6e6e;">Pravažiuota ratų</th>
-                        <th style="border-right: 1px solid #6e6e6e;">Vidutinis važiavimo laikas</th>
-                    </tr>
 
+                    <?php foreach ($reportData as $teamName => $drivers) : ?>
+                        <tr>
+                            <th colspan="3">Komandos pavadinimas</th>
+                            <th>Metinis biudžetas (EUR)</th>
+                            <th>Profesionali</th>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><?php echo $teamName; ?></td>
+                            <td><?php echo $drivers[0]['yearly_budget']; ?></td>
+                            <td><?php echo $drivers[0]['is_professional'] ? 'Taip' : 'Ne'; ?></td>
+                        </tr>
+
+                        <tr>
+                            <th>Vairuotojas</th>
+                            <th>Vidutinis laikas įveikiant trasą</th>
+                            <th style="border-right: 1px solid #6e6e6e;">Vidutinis važiuotos trasos ilgis (km)</th>
+                            <th style="border-right: 1px solid #6e6e6e;">Trasos, kuriose važiavo</th>
+                            <th>Važiavo trasose kartų</th>
+                        </tr>
+                        <?php foreach ($drivers as $driver) : ?>
+                            <?php
+                            $min = $driver['avgTime'] / 60000;
+                            $sec = number_format(($min - floor($min)) * 60, 3);
+                            $min = floor($min);
+                            ?>
+                            <tr>
+                                <td><?php echo $driver['first_name'] . ' ' . $driver['last_name']; ?></td>
+                                <td><?php echo $min . ' min ' . $sec . ' s'; ?></td>
+                                <td><?php echo number_format($driver['avgDistance'] / 1000, 2); ?></td>
+                                <td><?php echo $driver['trackNames']; ?></td>
+                                <td class="report-countable"><?php echo $driver['lapCount']; ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="bold">Iš viso grupėje:</td>
+                            <td class="bold report-countable">
+                                <?php echo array_sum(array_map(function($driver) {
+                                    return $driver['lapCount'];
+                                }, $drivers)); ?>
+                            </td>
+                        </tr>
+                        <tr><td class="separator" colspan="5"></td></tr>
+                    <?php endforeach; ?>
                     <tr><td class="separator" colspan="5"></td></tr>
-                    <?php
-                    // suformuojame lentelę
-                    foreach($reportData as $key => $val) {
-                        $min = $val['avgTime'] / 60000;
-                        $sec = number_format(($min - floor($min)) * 60, 3);
-                        $min = floor($min);
-                        echo
-                        "<tr>",
-                        "<td>{$val['name']}</td>",
-                        "<td>{$val['distance_meters']} m</td>",
-                        "<td>{$val['location']}</td>",
-                        "<td>{$val['lapCount']}</td>",
-                        "<td>{$min} min {$sec} s</td>",
-                        "</tr>\n";
-                    } ?>
-
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="bold">Iš viso:</td>
+                        <td class="bold report-countable-all"><?php echo array_sum(array_map(function($team) {
+                                return array_sum(array_map(function($driver) {
+                                    return $driver['lapCount'];
+                                }, $team));
+                            }, $reportData));?>
+                        </td>
+                    </tr>
                 </table>
             <?php } else { ?>
                 <div class="warningBox">
-                    Nurodytu laikotartpiu trasose nebuvo važiuojama
+                    Nurodytu laikotartpiu komandų aktyvumo trasose nebuvo
                 </div>
             <?php } ?>
         </div>

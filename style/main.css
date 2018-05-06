@@ -576,3 +576,15 @@ fieldset .submit {
 .success {
     background-color: rgba(46, 252, 111, 0.4);
 }
+
+.bold {
+    font-weight: bold;
+}
+
+.report-countable {
+    background-color: rgba(51, 170, 255, 0.4);
+}
+
+.report-countable-all {
+    background-color: rgba(0, 127, 255, 0.4);
+}
