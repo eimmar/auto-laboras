@@ -34,9 +34,24 @@ use Utils\Routing;
         <div id="contentMain">
             <?php
             if (sizeof($reportData) > 0) { ?>
+
+                <?php
+                $isPro = null;
+                ?>
                 <table class="reportTable">
 
                     <?php foreach ($reportData as $teamName => $drivers) : ?>
+                        <tr>
+                            <th colspan="5">
+                                <?php if ((bool)$drivers[0]['is_professional'] !== $isPro) : ?>
+                                    <?php if ($drivers[0]['is_professional']) : ?>
+                                        Profesionalios komandos
+                                    <?php else : ?>
+                                        Neprofesionalios komandos
+                                    <?php endif; $isPro = (bool) $drivers[0]['is_professional'];?>
+                                <?php endif;?>
+                            </th>
+                        </tr>
                         <tr>
                             <th colspan="3">Komandos pavadinimas</th>
                             <th>Metinis biudžetas (EUR)</th>

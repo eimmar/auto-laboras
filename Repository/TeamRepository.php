@@ -54,7 +54,7 @@ class TeamRepository extends BaseRepository
         $query .= 'FROM teams, drivers, tracks, laps ';
         $query .= 'WHERE drivers.team_id = teams.id AND laps.driver_id = drivers.id AND laps.track_id = tracks.id ';
         $query .= 'AND laps.date_lapped >= :date_from AND laps.date_lapped <= :date_to ';
-        $query .= 'GROUP BY teams.id, drivers.id ORDER BY teams.name, avgTime ASC';
+        $query .= 'GROUP BY teams.id, drivers.id ORDER BY teams.is_professional DESC, teams.name, avgTime ASC';
 
         $stmt = Mysql::getInstance()->prepare($query);
 
